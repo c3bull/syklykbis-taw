@@ -1,7 +1,7 @@
 import 'swiper/css';
 import shuffle from 'lodash/shuffle';
 import React, { useEffect, useState } from 'react';
-import { Autoplay , Controller} from 'swiper';
+import { Autoplay } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SectionHeader from "../common/SectionHeader";
 import allProductsData from "../../data/allProducts";
@@ -27,11 +27,12 @@ export default function OurProductsSwiper({ goToProducts }) {
                     Nasze Produkty
                 </SectionHeader>
                 <Swiper
-                    className="max-h-[90vh] max-w-[100%]"
-                    modules={[Controller]}
+                    className="relative max-h-[90vh] w-full"
+                    modules={[Autoplay]}
                     slidesPerView={8}
                     autoplay={{ delay: 1300 }}
                     loop={true}
+                    speed={500}
                 >
                     {allProducts.map((item) => {
                         return (

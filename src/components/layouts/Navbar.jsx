@@ -74,7 +74,7 @@ export default function Navbar() {
                             </div>
                             <div className='flex flex-1 items-center justify-center sm:text-center'>
                                 <div className='flex shrink-0 items-center'>
-                                    <Link href={'/'}>
+                                    <Link to={'/'}>
                                         <a className='cursor-pointer border-hidden'>
                                             <img
                                                 className='block h-16 w-auto lg:hidden'
@@ -83,7 +83,7 @@ export default function Navbar() {
                                             />
                                         </a>
                                     </Link>
-                                    <Link href={'/'}>
+                                    <Link to={'/'}>
                                         <a className='cursor-pointer border-hidden'>
                                             <img
                                                 className='hidden h-16 w-auto lg:block'
@@ -151,7 +151,7 @@ export default function Navbar() {
                                             <Menu.Items
                                                 className='absolute right-0 mt-2 w-48 origin-top-right rounded-md border-hidden bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
                                                 <Menu.Item>
-                                                    <Link href='/twoje-zamowienia'>
+                                                    <Link to='/twoje-zamowienia'>
                                                         <div
                                                             className='block cursor-pointer rounded border-hidden px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
                                                             <div className='flex items-center'>
