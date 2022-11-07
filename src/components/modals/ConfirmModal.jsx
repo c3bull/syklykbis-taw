@@ -1,4 +1,4 @@
-import { useUser } from '@auth0/nextjs-auth0';
+import { useAuth0 } from "@auth0/auth0-react";
 import emailjs from '@emailjs/browser';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
@@ -23,7 +23,7 @@ export function ConfirmModal(props) {
         productsToSave,
     } = props;
     const navigate = useNavigate();
-    const { user } = useUser();
+    const { user } = useAuth0();
     const formSchema = Yup.object().shape({
         name: Yup.string().required('Pole obowiązkowe'),
         phone: Yup.string()

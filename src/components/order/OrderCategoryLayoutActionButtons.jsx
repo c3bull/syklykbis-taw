@@ -1,4 +1,4 @@
-import {useUser} from '@auth0/nextjs-auth0';
+import { useAuth0 } from "@auth0/auth0-react";
 
 import {ClassNames} from "../utils/UtilFunctions";
 import {imageUrl} from "../utils/Image";
@@ -7,7 +7,7 @@ import React from 'react';
 
 export default function OrderCategoryLayoutActionButtons(props) {
     const {appendProductAmount, selectedProductsAmount, item} = props;
-    const {user} = useUser();
+    const {user} = useAuth0();
     return (
         <div className={ClassNames(!user ? 'blur-sm' : '')}>
             <div className='flex flex w-full items-center justify-center'>

@@ -1,14 +1,12 @@
-import {useUser} from '@auth0/nextjs-auth0';
-import {useNavigate} from 'react-router-dom';
+import { useAuth0 } from "@auth0/auth0-react";
 import {useState} from 'react';
 
 import {NotLoggedModal} from "../components/modals/NotLoggedModal";
 import {Prices} from "../components/prices/Prices";
 
 const PricesPage = () => {
-    const {user} = useUser();
+    const {user,loginWithRedirect} = useAuth0();
     const [showModal, setShowModal] = useState(-1);
-    const navigate = useNavigate();
 
     return (
         <div>
@@ -17,9 +15,7 @@ const PricesPage = () => {
                     onClickClose={() => {
                         setShowModal(1);
                     }}
-                    onClickLogin={() => {
-                        navigate('/api/auth/login');
-                    }}
+                    onClickLogin={loginWithRedirect}
                     message="Aby móc zobaczyć ceny, musisz się zalogować"
                 />
             )}

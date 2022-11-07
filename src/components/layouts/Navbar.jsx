@@ -1,4 +1,4 @@
-import {useUser} from '@auth0/nextjs-auth0';
+import { useAuth0 } from "@auth0/auth0-react";
 import {Disclosure, Menu, Transition} from '@headlessui/react';
 import React, {Fragment} from 'react';
 
@@ -6,7 +6,7 @@ import {imageUrl} from "../utils/Image";
 import {Link} from "react-router-dom";
 
 export default function Navbar() {
-    const {user} = useUser();
+    const {user, loginWithRedirect, logout } = useAuth0();
     const links = [
         {
             id: 1,
@@ -113,8 +113,8 @@ export default function Navbar() {
                                 {/* Profile dropdown */}
                                 {!user ? (
                                     <a
-                                        className='flex items-center rounded border-hidden px-3 py-1.5 text-white hover:bg-gray-700'
-                                        href='/api/auth/login'
+                                        className='cursor-pointer flex items-center rounded border-hidden px-3 py-1.5 text-white hover:bg-gray-700'
+                                        onClick={loginWithRedirect}
                                     >
                                         <div className='flex items-center' aria-hidden='true'>
                                             <img
@@ -172,8 +172,10 @@ export default function Navbar() {
                                                 </Menu.Item>
                                                 <Menu.Item>
                                                     <a
-                                                        className='block rounded border-hidden px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
-                                                        href='/api/auth/logout'
+                                                        className='cursor-pointer block rounded border-hidden px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                                                        onClick={() => {
+                                                            logout({ returnTo: window.location.origin });
+                                                        }}
                                                     >
                                                         <div className='flex items-center'>
                                                             <div className='flex items-center' aria-hidden='true'>

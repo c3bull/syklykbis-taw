@@ -1,5 +1,4 @@
-import {useUser} from '@auth0/nextjs-auth0';
-import { useNavigate } from 'react-router-dom';
+import { useAuth0 } from "@auth0/auth0-react";
 import React, {useState} from 'react';
 import * as Realm from 'realm-web';
 
@@ -29,8 +28,7 @@ const Order = () => {
     const [showBasket, setShowBasket] = useState(false);
     const [showModal, setShowModal] = useState(-1);
     const [showConfirmModal, setShowConfirmModal] = useState(-1);
-    const navigate = useNavigate();
-    const {user} = useUser();
+    const {user, loginWithRedirect} = useAuth0();
     const [showThanksModal, setShowThanksModal] = useState(-1);
 
     const iconRemap = {
@@ -206,9 +204,7 @@ const Order = () => {
                     onClickClose={() => {
                         setShowModal(1);
                     }}
-                    onClickLogin={() => {
-                        navigate('/api/auth/login');
-                    }}
+                    onClickLogin={loginWithRedirect}
                     message='Aby móc złożyć zamówienie, musisz się zalogować'
                 />
             )}

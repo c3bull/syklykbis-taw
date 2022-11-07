@@ -1,4 +1,4 @@
-import {useUser} from '@auth0/nextjs-auth0';
+import { useAuth0 } from "@auth0/auth0-react";
 
 import Modal from "./Modal";
 import {imageUrl} from "../utils/Image";
@@ -6,7 +6,7 @@ import React from 'react';
 
 export function BasketModal(props) {
     const {data, onClick, bottleAmount, finalPrice, confirmOrder} = props;
-    const {user} = useUser();
+    const {user} = useAuth0();
     return (
         <Modal
             classes="items-center justify-center overflow-auto"

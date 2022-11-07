@@ -1,4 +1,4 @@
-import { useUser } from '@auth0/nextjs-auth0';
+import { useAuth0 } from "@auth0/auth0-react";
 
 import OrderCategoryLayoutActionButtons from "./OrderCategoryLayoutActionButtons";
 import PricesSideButtons from "../prices/PricesSideButtons";
@@ -18,7 +18,7 @@ export function OrderCategoryLayout(props) {
         icon,
     } = props;
 
-    const { user } = useUser();
+    const { user } = useAuth0();
     return (
         <>
             <PricesSideButtons />

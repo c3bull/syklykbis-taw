@@ -1,16 +1,16 @@
-import { useUser } from '@auth0/nextjs-auth0';
+import {useAuth0} from "@auth0/auth0-react";
 
 import PricesSideButtons from "./PricesSideButtons";
-import { getProductsByCategory} from "../../data/allProducts";
-import { imageUrl} from "../utils/Image";
-import { ClassNames} from "../utils/UtilFunctions";
+import {getProductsByCategory} from "../../data/allProducts";
+import {imageUrl} from "../utils/Image";
+import {ClassNames} from "../utils/UtilFunctions";
 
-export function Prices({ title, color, category, classes }) {
-    const { user } = useUser();
+export function Prices({title, color, category, classes}) {
+    const {user} = useAuth0();
 
     return (
         <div>
-            <PricesSideButtons />
+            <PricesSideButtons/>
             <section id={category}>
                 <h2 className="pt-16 text-center text-3xl font-medium uppercase">
                     {title}
@@ -35,7 +35,8 @@ export function Prices({ title, color, category, classes }) {
                             >
                                 <div className="absolute top-2 right-2 h-auto w-auto font-medium">
                                     <div className="flex select-none items-center">
-                                        <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary text-center shadow-lg">
+                                        <div
+                                            className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary text-center shadow-lg">
                                             <p className="pb-0.5 pl-0.5 pt-0.5">{item.vat}%</p>
                                         </div>
                                         <p className="pl-2 pt-0.5">VAT</p>
@@ -50,7 +51,8 @@ export function Prices({ title, color, category, classes }) {
                                     {item.name}
                                 </p>
                                 {user ? (
-                                    <div className="flex w-full flex-col items-center justify-center bg-gray-100 pb-4 pt-2">
+                                    <div
+                                        className="flex w-full flex-col items-center justify-center bg-gray-100 pb-4 pt-2">
                                         <div className="flex w-full justify-center pt-2">
                                             <p>Cena brutto:</p>
                                             <p className="pl-2 font-bold text-primary">

@@ -1,5 +1,5 @@
 import React from 'react';
-import {useUser} from '@auth0/nextjs-auth0';
+import { useAuth0 } from "@auth0/auth0-react";
 
 import allProductsData from "../../data/allProducts";
 import {imageUrl} from "../utils/Image";
@@ -70,7 +70,7 @@ export default function BasketXL({
         }
     };
 
-    const {user} = useUser();
+    const {user} = useAuth0();
     return (
         <div
             className="fixed right-28 top-[15%] hidden w-96 flex-col items-center justify-center rounded-lg border border-gray-400 bg-white px-5 pb-5 drop-shadow-2xl 2xl:flex">
