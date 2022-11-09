@@ -38,11 +38,9 @@ export function ConfirmModal(props) {
     });
 
     const sendEmail = (values) => {
-        // @ts-ignore
         emailjs.send(
-            // @ts-ignore
-            process.env.NEXT_PUBLIC_REACT_APP_SERVICE_ID,
-            process.env.NEXT_PUBLIC_REACT_APP_TEMPLATE_ID,
+            'service_rnstbwt',
+            'template_85d772l',
             {
                 subject: 'Zamówienie',
                 name: values.name,
@@ -58,7 +56,7 @@ export function ConfirmModal(props) {
                 date: format(new Date(), 'dd/MM/yyyy, H:mm:ss'),
                 sum: `${sum.toFixed(2)} zł`,
             },
-            process.env.NEXT_PUBLIC_REACT_APP_USER_ID
+            'KghLITkoJwPn1fmzX'
         );
     };
 

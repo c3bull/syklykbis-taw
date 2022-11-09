@@ -21,13 +21,11 @@ const YourOrdersPage = () => {
     }, [user]);
 
     const getOrders = async () => {
-        const REALM_APP_ID = process.env.NEXT_PUBLIC_REALM_APP_ID;
-        // @ts-ignore
+        const REALM_APP_ID = 'syklykbis-ogied';
         const app = new Realm.App({id: REALM_APP_ID});
         const credentials = Realm.Credentials.anonymous();
         try {
             const userMongo = await app.logIn(credentials);
-            // @ts-ignore
             const allUserOrders = await userMongo.functions.getUserOrders({
                 email: user?.email
             });
@@ -166,12 +164,10 @@ const YourOrdersPage = () => {
                             })
                         ) : (
                             <div className='flex flex-col items-center p-5'>
-                                {/* @ts-ignore */}
                                 <p className='hidden'>
                                     {' '}
                                     {setTimeout(() => setNoOrders(true), 3000)}
                                 </p>
-                                {/* @ts-ignore */}
                                 <p className='hidden'>
                                     {' '}
                                     {setTimeout(() => setNoOrdersSpinner(false), 3000)}

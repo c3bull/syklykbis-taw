@@ -115,14 +115,13 @@ const Order = () => {
     }
 
     const saveOrderToDb = async () => {
-        const REALM_APP_ID = process.env.NEXT_PUBLIC_REALM_APP_ID;
-        // @ts-ignore
+        const REALM_APP_ID = 'syklykbis-ogied';
         const app = new Realm.App({id: REALM_APP_ID});
         const credentials = Realm.Credentials.anonymous();
 
         const orderedProducts = allProductsData
             .filter((pd) => {
-                // odfiltrowywujeesz nie zamowione produkty
+                // odfiltrowanie niezamowionych produktow
                 return selectedProductsAmount[pd.id];
             })
             .map((pd) => {
@@ -172,7 +171,6 @@ const Order = () => {
                                     <div>
                                         <div
                                             className='flex items-center overflow-x-auto whitespace-nowrap whitespace-nowrap uppercase scrollbar-thin scrollbar-thumb-gray-400 sm:w-full'>
-                                            {/* @ts-ignore */}
                                             <p className='pl-1 pb-0.5'>
                                                 {iconRemap[item.hint]?.icon}
                                             </p>

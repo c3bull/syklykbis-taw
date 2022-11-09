@@ -103,7 +103,6 @@ export default function YourOrderCollapsible({index, item}) {
                                         >
                                             <div className={ClassNames('hidden', 'lg:flex')}>
                                                 <div className='flex'>
-                                                    {/* @ts-ignore */}
                                                     <div
                                                         className='pl-2 pt-0.5'
                                                         title={iconRemap[ordered.hint]?.hoverHint}
@@ -116,7 +115,6 @@ export default function YourOrderCollapsible({index, item}) {
 
                                             <div className={ClassNames('lg:hidden')}>
                                                 <div className='flex'>
-                                                    {/* @ts-ignore */}
                                                     <div className='pl-2 pt-0.5'>
                                                         {iconRemap[ordered.hint]?.icon}
                                                     </div>
