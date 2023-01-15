@@ -1,12 +1,8 @@
 import React from 'react';
-import { useAuth0 } from "@auth0/auth0-react";
-
-import allProductsData from "../../data/allProducts";
 import {imageUrl} from "../utils/Image";
 import {isExpired} from "react-jwt";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import shuffle from "lodash/shuffle";
 
 
 export default function BasketXL({
@@ -23,7 +19,6 @@ export default function BasketXL({
             method: 'get',
             url: 'http://localhost:3001/products',
         }).then((response) => {
-            console.log("category url: ", response.data)
             setAllProducts(response.data)
         }).catch((error) => {
             console.log(error);
@@ -91,7 +86,6 @@ export default function BasketXL({
         }
     };
 
-    const {user} = useAuth0();
     return (
         <div
             className="fixed right-28 top-[15%] hidden w-96 flex-col items-center justify-center rounded-lg border border-gray-400 bg-white px-5 pb-5 drop-shadow-2xl 2xl:flex">

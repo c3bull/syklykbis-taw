@@ -14,7 +14,6 @@ export default function OurProductsSwiper({ goToProducts }) {
             method: 'get',
             url: 'http://localhost:3001/products',
         }).then((response) => {
-            console.log("category url: ", response.data)
             setAllProducts(shuffle(response.data))
         }).catch((error) => {
             console.log(error);

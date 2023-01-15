@@ -21,6 +21,7 @@ const Register = () => {
                 password: inputPassword
             }
         }).then((response) => {
+            console.log("register response: ", response)
             ReloadButton();
         }).catch((error) => {
             console.log(error);
@@ -34,7 +35,6 @@ const Register = () => {
 
     const LogInButton = () => {
         navigate('/zaloguj');
-        // window.location.reload(false);
     };
 
     return (

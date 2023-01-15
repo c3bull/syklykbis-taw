@@ -1,7 +1,5 @@
-import {useAuth0} from "@auth0/auth0-react";
-
 import PricesSideButtons from "./PricesSideButtons";
-import {getProductsByCategory, getProductsByCategoryFetched} from "../../data/allProducts";
+import {getProductsByCategoryFetched} from "../../data/allProducts";
 import {imageUrl} from "../utils/Image";
 import {ClassNames} from "../utils/UtilFunctions";
 import {isExpired} from "react-jwt";
@@ -9,7 +7,6 @@ import axios from "axios";
 import {useEffect, useState} from "react";
 
 export function Prices({title, color, category, classes}) {
-    const {user} = useAuth0();
     const isExp = isExpired(localStorage.getItem('token'))
     const [products, setProducts] = useState([])
 
@@ -21,9 +18,7 @@ export function Prices({title, color, category, classes}) {
                 category: category,
             }
         }).then((response) => {
-            console.log("category url: ", response.data)
             setProducts(response.data)
-            // ReloadButton();
         }).catch((error) => {
             console.log(error);
         });

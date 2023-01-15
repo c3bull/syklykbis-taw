@@ -1,37 +1,14 @@
-import {useAuth0} from "@auth0/auth0-react";
 import {Disclosure, Menu, Transition} from '@headlessui/react';
 import React, {Fragment} from 'react';
 
 import {imageUrl} from "../utils/Image";
 import {Link} from "react-router-dom";
-import BottleModalTableLabels from "../modals/BottleModalTableLabels";
-import BottleModalTableValues from "../modals/BottleModalTableValues";
-import Modal from "../modals/Modal";
 import {decodeToken, isExpired} from "react-jwt";
 import axios from "axios";
 
 export default function Navbar() {
-    const {user, loginWithRedirect, logout} = useAuth0();
     const isExp = isExpired(localStorage.getItem('token'))
     const decodedToken = decodeToken(localStorage.getItem('token'))
-
-    const Login = () => {
-        return (
-            <Modal title="zaloguj" classes="items-center">
-                <div className="flex flex-col items-center justify-center md:flex-row md:py-5">
-
-                </div>
-                <div className="flex justify-end">
-                    <button
-                        className="w-full rounded bg-primary px-10 py-4 font-semibold uppercase text-white"
-
-                    >
-                        Zamknij
-                    </button>
-                </div>
-            </Modal>
-        )
-    }
 
     const LogOutButton = () => {
         axios({
@@ -42,7 +19,6 @@ export default function Navbar() {
             }
         })
             .then((response) => {
-                console.log('resp ' + JSON.stringify(response));
                 if (response.data.deletedCount === 1) {
                     localStorage.removeItem('token');
                     window.location.reload(false);

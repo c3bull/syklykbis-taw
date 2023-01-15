@@ -1,6 +1,5 @@
 import {useAuth0} from "@auth0/auth0-react";
 import React, {useState} from 'react';
-import * as Realm from 'realm-web';
 
 import {BasketModal} from "../components/modals/BasketModal";
 import {ConfirmModal} from "../components/modals/ConfirmModal";
@@ -10,12 +9,10 @@ import BasketXL from "../components/order/BasketXL";
 import LittleBasket from "../components/order/LittleBasket";
 import {OrderCategoryLayout} from "../components/order/OrderCategoryLayout";
 import OrderMap from "../components/order/OrderMap";
-import allProductsData from "../data/allProducts";
 import {imageUrl} from "../components/utils/Image";
 import {format} from 'date-fns';
 import axios from "axios";
 import {decodeToken, isExpired} from "react-jwt";
-import shuffle from "lodash/shuffle";
 import {useEffect} from "react";
 
 function emptyArray(size) {
@@ -32,7 +29,7 @@ const Order = () => {
     const [showBasket, setShowBasket] = useState(false);
     const [showModal, setShowModal] = useState(-1);
     const [showConfirmModal, setShowConfirmModal] = useState(-1);
-    const {user, loginWithRedirect} = useAuth0();
+    const {loginWithRedirect} = useAuth0();
     const [showThanksModal, setShowThanksModal] = useState(-1);
     const isExp = isExpired(localStorage.getItem('token'))
     const decodedToken = decodeToken(localStorage.getItem('token'))
@@ -43,7 +40,6 @@ const Order = () => {
             method: 'get',
             url: 'http://localhost:3001/products',
         }).then((response) => {
-            console.log("allproducts: ", response.data)
             setAllProducts(response.data)
         }).catch((error) => {
             console.log(error);
@@ -112,7 +108,6 @@ const Order = () => {
     };
 
     const appendProductAmount = (index, amount) => {
-        console.log("index ", index)
         const current = selectedProductsAmount[index];
         let am = current + amount;
         if (am < 0) {
@@ -169,39 +164,6 @@ const Order = () => {
             .catch(function (error) {
                 console.log(error);
             });
-
-        // const REALM_APP_ID = 'syklykbis-ogied';
-        // const app = new Realm.App({id: REALM_APP_ID});
-        // const credentials = Realm.Credentials.anonymous();
-
-        // const orderedProducts = allProductsData
-        //     .filter((pd) => {
-        //         // odfiltrowanie niezamowionych produktow
-        //         return selectedProductsAmount[pd.id];
-        //     })
-        //     .map((pd) => {
-        //         const {id, name, hint} = pd;
-        //         return {
-        //             amount: selectedProductsAmount[id],
-        //             hint,
-        //             name,
-        //             productId: id
-        //         };
-        //     });
-
-        // const order = {
-        //     orderedProducts,
-        //     placementDate: format(new Date(), 'dd/MM/yyyy'),
-        //     totalPrice: finalPrice().toFixed(2),
-        //     email: user?.email
-        // };
-
-        // try {
-        //     const userMongo = await app.logIn(credentials);
-        //     await userMongo.functions.saveOrder(order);
-        // } catch (error) {
-        //     console.log(error);
-        // }
     };
 
     const confirmOrder = () => {

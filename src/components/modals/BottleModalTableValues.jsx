@@ -5,7 +5,6 @@ export default function BottleModalTableValues({ data }) {
     return (
         <div className="select-none font-semibold">
             {data.tableValues.map((value, index) => {
-                // console.log("val ",value)
                 return (
                     <div key={index}>
                         {[
@@ -21,7 +20,6 @@ export default function BottleModalTableValues({ data }) {
                         ]
                             .filter((value) => !!value)
                             .map((productValue, index) => {
-                                console.log("productValue ", productValue)
                                 return (
                                 <p
                                     className={ClassNames(

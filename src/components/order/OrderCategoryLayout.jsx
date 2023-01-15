@@ -1,8 +1,6 @@
-import { useAuth0 } from "@auth0/auth0-react";
-
 import OrderCategoryLayoutActionButtons from "./OrderCategoryLayoutActionButtons";
 import PricesSideButtons from "../prices/PricesSideButtons";
-import {getProductsByCategory, getProductsByCategoryFetched} from "../../data/allProducts";
+import {getProductsByCategoryFetched} from "../../data/allProducts";
 import { imageUrl} from "../utils/Image";
 import { ClassNames} from "../utils/UtilFunctions";
 import {isExpired} from "react-jwt";
@@ -21,7 +19,6 @@ export function OrderCategoryLayout(props) {
         icon,
     } = props;
     const isExp = isExpired(localStorage.getItem('token'))
-    const { user } = useAuth0();
 
     const [products, setProducts] = useState([])
 
@@ -33,9 +30,7 @@ export function OrderCategoryLayout(props) {
                 category: category,
             }
         }).then((response) => {
-            console.log("category url: ", response.data)
             setProducts(response.data)
-            // ReloadButton();
         }).catch((error) => {
             console.log(error);
         });

@@ -1,5 +1,3 @@
-import { useAuth0 } from "@auth0/auth0-react";
-
 import Modal from "./Modal";
 import {imageUrl} from "../utils/Image";
 import React from 'react';
@@ -7,7 +5,6 @@ import {isExpired} from "react-jwt";
 
 export function BasketModal(props) {
     const {data, onClick, bottleAmount, finalPrice, confirmOrder} = props;
-    const {user} = useAuth0();
     const isExp = isExpired(localStorage.getItem('token'))
     return (
         <Modal

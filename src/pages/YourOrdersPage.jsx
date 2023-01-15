@@ -1,6 +1,5 @@
 import {useAuth0} from "@auth0/auth0-react";
 import React, {useEffect, useState} from 'react';
-import * as Realm from 'realm-web';
 
 import {NotLoggedModal} from "../components/modals/NotLoggedModal";
 import YourOrderCollapsible from "../components/yourOrders/YourOrderCollapsible";
@@ -9,7 +8,7 @@ import YourOrdersHeader from "../components/yourOrders/YourOrdersHeader";
 import {ClassNames} from "../components/utils/UtilFunctions";
 import {imageUrl} from "../components/utils/Image";
 import axios from "axios";
-import {decodeToken, isExpired} from "react-jwt";
+import {decodeToken} from "react-jwt";
 
 const YourOrdersPage = () => {
     const [myOrders, setMyOrders] = useState([]);
@@ -17,7 +16,7 @@ const YourOrdersPage = () => {
     const [noOrdersSpinner, setNoOrdersSpinner] = useState(true);
     const [showModal, setShowModal] = useState(-1);
     const decodedToken = decodeToken(localStorage.getItem('token'))
-    const {user, loginWithRedirect} = useAuth0();
+    const {loginWithRedirect} = useAuth0();
     useEffect(() => {
         decodedToken && getOrders();
     }, []);
@@ -30,25 +29,11 @@ const YourOrdersPage = () => {
                 userEmail: decodedToken.name
             }
         }).then(function (response) {
-            console.log("resp ", response.data)
             setMyOrders(response.data);
         })
             .catch(function (error) {
                 console.log(error);
             });
-
-        // const REALM_APP_ID = 'syklykbis-ogied';
-        // const app = new Realm.App({id: REALM_APP_ID});
-        // const credentials = Realm.Credentials.anonymous();
-        // try {
-        //     const userMongo = await app.logIn(credentials);
-        //     const allUserOrders = await userMongo.functions.getUserOrders({
-        //         email: user?.email
-        //     });
-        //     setMyOrders(allUserOrders);
-        // } catch (error) {
-        //     console.log(error);
-        // }
     };
 
     return (

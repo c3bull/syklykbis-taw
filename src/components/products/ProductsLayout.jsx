@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { BottleModal} from "../modals/BottleModal";
-import allProductsData, {getProductsByCategory, getProductsByCategoryFetched} from "../../data/allProducts";
+import {getProductsByCategoryFetched} from "../../data/allProducts";
 import { imageUrl} from "../utils/Image";
 import { ClassNames} from "../utils/UtilFunctions";
 import axios from "axios";
@@ -10,7 +10,6 @@ import {useEffect} from 'react';
 
 function ProductsLayout({ categoryUrl, className, color }) {
     const [bottleIndex, setBottleIndex] = useState(-1);
-    console.log("cat rul ", categoryUrl)
     const [products, setProducts] = useState([])
     const getAllProductsByCategory = () => {
         axios({
@@ -20,9 +19,7 @@ function ProductsLayout({ categoryUrl, className, color }) {
                 category: categoryUrl,
             }
         }).then((response) => {
-            console.log("category url: ", response.data)
             setProducts(response.data)
-            // ReloadButton();
         }).catch((error) => {
             console.log(error);
         });
@@ -31,7 +28,7 @@ function ProductsLayout({ categoryUrl, className, color }) {
         categoryUrl && getAllProductsByCategory();
     }, []);
 
-    function BottleDisplay({ id, bottle, name, index}) {
+    function BottleDisplay({ bottle, name, index}) {
         return (
             <article>
                 <div

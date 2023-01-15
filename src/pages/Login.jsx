@@ -1,5 +1,3 @@
-import ContactIconsSm from "../components/contact/ContactIconsSm";
-import ContactWays from "../components/contact/ContactWays";
 import {imageUrl} from "../components/utils/Image";
 import React, {useState} from 'react';
 import axios from "axios";
@@ -19,7 +17,6 @@ const Login = () => {
                 password: inputPassword
             }
         }).then((response) => {
-            console.log('rdt ', response.data.token)
             localStorage.setItem('token', response.data.token);
             ReloadButton();
         }).catch((error) => {
@@ -34,7 +31,6 @@ const Login = () => {
 
     const RegisterButton = () => {
         navigate('/zarejestruj');
-        // window.location.reload(false);
     };
 
     return (

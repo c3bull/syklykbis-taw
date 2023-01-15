@@ -1,4 +1,3 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import emailjs from '@emailjs/browser';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
@@ -11,8 +10,6 @@ import React from 'react';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import {decodeToken} from "react-jwt";
-// import * as yup from 'yup';
-
 
 export function ConfirmModal(props) {
     const {
@@ -24,7 +21,6 @@ export function ConfirmModal(props) {
         productsToSave,
     } = props;
     const navigate = useNavigate();
-    const { user } = useAuth0();
     const decodedToken = decodeToken(localStorage.getItem('token'))
 
     const formSchema = Yup.object().shape({
@@ -42,8 +38,6 @@ export function ConfirmModal(props) {
 
     const sendEmail = (values) => {
         emailjs.send(
-            // 'service_rnstbwt',
-            // 'template_85d772l',
             'service_4iq6nqv',
             'template_fpws0iq',
             {
@@ -54,7 +48,6 @@ export function ConfirmModal(props) {
                 zipcode: values.zipcode,
                 address: values.address,
                 productsToSave: productsToSave.map((item) => {
-                    console.log('item ', item)
                     return item.hint
                         ? ` ${item.hint} ${item.name}: ${item.amount}`
                         : ` ${item.name}: ${item.amount}`;
@@ -62,7 +55,6 @@ export function ConfirmModal(props) {
                 date: format(new Date(), 'dd/MM/yyyy, H:mm:ss'),
                 sum: `${sum.toFixed(2)} zł`,
             },
-            // 'KghLITkoJwPn1fmzX'
             'CNpreU7L2ExeCgd97'
         );
     };
@@ -121,7 +113,6 @@ export function ConfirmModal(props) {
                                 <button
                                     type="submit"
                                     className="flex w-full items-center justify-center rounded bg-primary p-2 font-semibold uppercase text-white sm:w-full sm:px-10 sm:py-4"
-                                    // onClick={onClickOrder}
                                 >
                                     <div className="inline-block mt-1">
                                         <img
