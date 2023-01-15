@@ -20,7 +20,7 @@ export function BasketModal(props) {
                     {!isExp && (
                         <div>
                             <div
-                                className='w-full items-center text-center justify-center'>
+                                className='w-full flex items-center text-center justify-center'>
                                 <img
                                     src={imageUrl('icons/ImInfo.png')}
                                     width='16px'
@@ -39,7 +39,7 @@ export function BasketModal(props) {
                         </div>
                     )}
                     <div
-                        className='mt-2 w-full items-center text-center justify-center'>
+                        className='mt-2 w-full flex items-center text-center justify-center'>
                         <img
                             src={imageUrl('icons/RiShoppingBasket2Line.png')}
                             width='30px'

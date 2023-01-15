@@ -42,8 +42,10 @@ export function ConfirmModal(props) {
 
     const sendEmail = (values) => {
         emailjs.send(
-            'service_rnstbwt',
-            'template_85d772l',
+            // 'service_rnstbwt',
+            // 'template_85d772l',
+            'service_4iq6nqv',
+            'template_fpws0iq',
             {
                 subject: 'Zamówienie',
                 name: values.name,
@@ -52,6 +54,7 @@ export function ConfirmModal(props) {
                 zipcode: values.zipcode,
                 address: values.address,
                 productsToSave: productsToSave.map((item) => {
+                    console.log('item ', item)
                     return item.hint
                         ? ` ${item.hint} ${item.name}: ${item.amount}`
                         : ` ${item.name}: ${item.amount}`;
@@ -59,7 +62,8 @@ export function ConfirmModal(props) {
                 date: format(new Date(), 'dd/MM/yyyy, H:mm:ss'),
                 sum: `${sum.toFixed(2)} zł`,
             },
-            'KghLITkoJwPn1fmzX'
+            // 'KghLITkoJwPn1fmzX'
+            'CNpreU7L2ExeCgd97'
         );
     };
 

@@ -2,10 +2,12 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 import OrderCategoryLayoutActionButtons from "./OrderCategoryLayoutActionButtons";
 import PricesSideButtons from "../prices/PricesSideButtons";
-import { getProductsByCategory} from "../../data/allProducts";
+import {getProductsByCategory, getProductsByCategoryFetched} from "../../data/allProducts";
 import { imageUrl} from "../utils/Image";
 import { ClassNames} from "../utils/UtilFunctions";
 import {isExpired} from "react-jwt";
+import {useEffect, useState} from "react";
+import axios from "axios";
 
 
 export function OrderCategoryLayout(props) {
@@ -21,6 +23,27 @@ export function OrderCategoryLayout(props) {
     const isExp = isExpired(localStorage.getItem('token'))
     const { user } = useAuth0();
 
+    const [products, setProducts] = useState([])
+
+    const getAllProductsByCategory = () => {
+        axios({
+            method: 'post',
+            url: 'http://localhost:3001/products/:category',
+            data: {
+                category: category,
+            }
+        }).then((response) => {
+            console.log("category url: ", response.data)
+            setProducts(response.data)
+            // ReloadButton();
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+    useEffect(() => {
+        category && getAllProductsByCategory();
+    }, []);
+
     return (
         <>
             <PricesSideButtons />
@@ -35,7 +58,7 @@ export function OrderCategoryLayout(props) {
                         classes
                     )}
                 >
-                    {getProductsByCategory(category).map((item) => {
+                    {getProductsByCategoryFetched(products, category).map((item) => {
                         return (
                             <div
                                 className="flex h-auto w-auto flex-col items-center rounded border border-gray-400 from-transparent

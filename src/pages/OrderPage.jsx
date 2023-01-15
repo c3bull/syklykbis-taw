@@ -15,6 +15,8 @@ import {imageUrl} from "../components/utils/Image";
 import {format} from 'date-fns';
 import axios from "axios";
 import {decodeToken, isExpired} from "react-jwt";
+import shuffle from "lodash/shuffle";
+import {useEffect} from "react";
 
 function emptyArray(size) {
     const arr = [];
@@ -25,7 +27,7 @@ function emptyArray(size) {
 }
 
 const Order = () => {
-    const [selectedProductsAmount, setSelectedProductsAmount] = useState(emptyArray(allProductsData.length));
+    const [selectedProductsAmount, setSelectedProductsAmount] = useState(emptyArray(33));
     const [refresh, serRefresh] = useState(false);
     const [showBasket, setShowBasket] = useState(false);
     const [showModal, setShowModal] = useState(-1);
@@ -34,6 +36,22 @@ const Order = () => {
     const [showThanksModal, setShowThanksModal] = useState(-1);
     const isExp = isExpired(localStorage.getItem('token'))
     const decodedToken = decodeToken(localStorage.getItem('token'))
+    const [allProducts, setAllProducts] = useState([]);
+
+    const getAllProducts = () => {
+        axios({
+            method: 'get',
+            url: 'http://localhost:3001/products',
+        }).then((response) => {
+            console.log("allproducts: ", response.data)
+            setAllProducts(response.data)
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+    useEffect(() => {
+        getAllProducts();
+    }, []);
 
     const iconRemap = {
         '[NIEGAZ]': {
@@ -94,6 +112,7 @@ const Order = () => {
     };
 
     const appendProductAmount = (index, amount) => {
+        console.log("index ", index)
         const current = selectedProductsAmount[index];
         let am = current + amount;
         if (am < 0) {
@@ -110,8 +129,8 @@ const Order = () => {
 
     function finalPrice() {
         let finalPrice = 0;
-        for (let i = 0; i < allProductsData.length; i++) {
-            const data = allProductsData[i];
+        for (let i = 0; i < allProducts.length; i++) {
+            const data = allProducts[i];
             const amount = selectedProductsAmount[i];
             finalPrice += amount * data.price;
         }
@@ -120,18 +139,18 @@ const Order = () => {
 
     const saveOrderToDb = async () => {
 
-        const orderedProducts = allProductsData
+        const orderedProducts = allProducts
             .filter((pd) => {
                 // odfiltrowanie niezamowionych produktow
-                return selectedProductsAmount[pd.id];
+                return selectedProductsAmount[pd.number];
             })
             .map((pd) => {
-                const {id, name, hint} = pd;
+                const {name, hint, number} = pd;
                 return {
-                    amount: selectedProductsAmount[id],
+                    amount: selectedProductsAmount[number],
                     hint,
                     name,
-                    productId: id
+                    productId: number
                 };
             });
 
@@ -195,7 +214,7 @@ const Order = () => {
             {showBasket && (
                 <BasketModal
                     data={[
-                        allProductsData.map((item, index) => {
+                        allProducts.map((item, index) => {
                             const amount = selectedProductsAmount[index];
 
                             if (!amount) {
@@ -252,7 +271,7 @@ const Order = () => {
                     onClickOrder={() => {
                         saveOrderToDb();
                     }}
-                    products={allProductsData.map((item, index) => {
+                    products={allProducts.map((item, index) => {
                         const amount = selectedProductsAmount[index];
 
                         if (!amount) {
@@ -273,14 +292,14 @@ const Order = () => {
                             </div>
                         );
                     })}
-                    productsToSave={allProductsData
+                    productsToSave={allProducts
                         .filter((pd) => {
-                            return selectedProductsAmount[pd.id];
+                            return selectedProductsAmount[pd.number];
                         })
                         .map((pd) => {
-                            const {id, name, hint} = pd;
+                            const {number, name, hint} = pd;
                             return {
-                                amount: selectedProductsAmount[id],
+                                amount: selectedProductsAmount[number],
                                 hint,
                                 name
                             };

@@ -4,6 +4,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 import allProductsData from "../../data/allProducts";
 import {imageUrl} from "../utils/Image";
 import {isExpired} from "react-jwt";
+import {useEffect, useState} from "react";
+import axios from "axios";
+import shuffle from "lodash/shuffle";
 
 
 export default function BasketXL({
@@ -13,6 +16,23 @@ export default function BasketXL({
                                      finalPrice,
                                  }) {
     const isExp = isExpired(localStorage.getItem('token'))
+
+    const [allProducts, setAllProducts] = useState([]);
+    const getAllProducts = () => {
+        axios({
+            method: 'get',
+            url: 'http://localhost:3001/products',
+        }).then((response) => {
+            console.log("category url: ", response.data)
+            setAllProducts(response.data)
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+    useEffect(() => {
+        getAllProducts();
+    }, []);
+
     const iconRemap = {
         '[NIEGAZ]': {
             icon: <div
@@ -79,7 +99,7 @@ export default function BasketXL({
                 {!isExp && (
                     <div>
                         <div
-                            className='w-full items-center text-center justify-center'>
+                            className='w-full flex items-center text-center justify-center'>
                             <img
                                 src={imageUrl('icons/ImInfo.png')}
                                 width='16px'
@@ -98,7 +118,7 @@ export default function BasketXL({
                     </div>
                 )}
                 <div
-                    className='mt-2 w-full items-center text-center justify-center'>
+                    className='mt-2 w-full flex items-center text-center justify-center'>
                     <img
                         src={imageUrl('icons/RiShoppingBasket2Line.png')}
                         width='30px'
@@ -124,7 +144,7 @@ export default function BasketXL({
 
             <div
                 className="flex h-full max-h-[20vh] w-full flex-col gap-4 overflow-auto scrollbar-thin scrollbar-thumb-primary">
-                {allProductsData.map((item, index) => {
+                {allProducts.map((item, index) => {
                     const amount = selectedProductsAmount[index];
 
                     if (!amount) {

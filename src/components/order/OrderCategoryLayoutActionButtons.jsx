@@ -22,7 +22,7 @@ export default function OrderCategoryLayoutActionButtons(props) {
                         <div
                             className={`text-white mr-1 rounded w-8 h-8 bg-neutral-700 hover:bg-neutral-600 duration-300 ${
                                 !isExp ? 'cursor-pointer' : 'cursor-not-allowed'}`}
-                            onClick={() => !isExp && appendProductAmount(item.id, -1)}>
+                            onClick={() => !isExp && appendProductAmount(item.number, -1)}>
                             <div className='w-full h-full flex items-center justify-center'>
                                 <img
                                     src={imageUrl('icons/AiFillMinusSquare.png')}
@@ -38,7 +38,7 @@ export default function OrderCategoryLayoutActionButtons(props) {
                             'text-xl text-center border h-8 flex items-center justify-center px-2 border-gray-400 rounded-sm min-w-[35px]'
                         )}
                     >
-                        {selectedProductsAmount && selectedProductsAmount[item.id]}
+                        {selectedProductsAmount && selectedProductsAmount[item.number]}
                     </div>
                     <div
                         className={`text-neutral-700 hover:text-neutral-600 duration-300 ${
@@ -48,7 +48,7 @@ export default function OrderCategoryLayoutActionButtons(props) {
                         <div
                             className={`text-white ml-1 rounded w-8 h-8 bg-neutral-700 hover:bg-neutral-600 duration-300 ${
                                 !isExp ? 'cursor-pointer' : 'cursor-not-allowed'}`}
-                            onClick={() => !isExp && appendProductAmount(item.id, 1)}>
+                            onClick={() => !isExp && appendProductAmount(item.number, 1)}>
                             <div className='w-full h-full flex items-center justify-center'>
                                 <img
                                     src={imageUrl('icons/AiFillPlusSquare.png')}
@@ -68,7 +68,7 @@ export default function OrderCategoryLayoutActionButtons(props) {
                         <p
                             className='flex w-10 items-center justify-center whitespace-nowrap rounded border border-neutral-700 bg-neutral-700 p-2 text-sm font-semibold uppercase text-white duration-300 hover:bg-neutral-600'
                             onClick={() => {
-                                !isExp && appendProductAmount(item.id, -24);
+                                !isExp && appendProductAmount(item.number, -24);
                             }}
                         >
                             -24
@@ -89,7 +89,7 @@ export default function OrderCategoryLayoutActionButtons(props) {
                         <p
                             className='flex w-10 items-center justify-center whitespace-nowrap rounded border border-neutral-700 bg-neutral-700 p-2 text-sm font-semibold uppercase text-white duration-200 hover:bg-neutral-600'
                             onClick={() => {
-                                !isExp && appendProductAmount(item.id, 24);
+                                !isExp && appendProductAmount(item.number, 24);
                             }}
                         >
                             +24
