@@ -14,6 +14,8 @@ import Footer from "./components/footer/Footer";
 import YourOrdersPage from "./pages/YourOrdersPage";
 import ScrollToTop from "./components/utils/ScrollToTop";
 import Sidebar from "./components/layouts/Sidebar";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
     return (
@@ -34,6 +36,8 @@ function App() {
                         <Route path='/zamow' element={<OrderPage/>}/>
                         <Route path='/produkty/:category' element={<ProductsDetails/>}/>
                         <Route path='/twoje-zamowienia' element={<YourOrdersPage/>}/>
+                        <Route path='/zaloguj' element={<Login/>}/>
+                        <Route path='/zarejestruj' element={<Register/>}/>
                     </Routes>
                 </ScrollToTop>
                 <Footer/>

@@ -5,6 +5,7 @@ import PricesSideButtons from "../prices/PricesSideButtons";
 import { getProductsByCategory} from "../../data/allProducts";
 import { imageUrl} from "../utils/Image";
 import { ClassNames} from "../utils/UtilFunctions";
+import {isExpired} from "react-jwt";
 
 
 export function OrderCategoryLayout(props) {
@@ -17,8 +18,9 @@ export function OrderCategoryLayout(props) {
         classes,
         icon,
     } = props;
-
+    const isExp = isExpired(localStorage.getItem('token'))
     const { user } = useAuth0();
+
     return (
         <>
             <PricesSideButtons />
@@ -53,7 +55,7 @@ export function OrderCategoryLayout(props) {
                                     item={item}
                                 />
                                 <div className="flex w-full items-center justify-center py-5">
-                                    {user && (
+                                    {!isExp && (
                                         <div>
                                             <div className="flex justify-center">
                                                 <p className="font-bold text-primary">

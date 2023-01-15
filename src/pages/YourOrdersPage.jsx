@@ -8,31 +8,47 @@ import YourOrdersColumn from "../components/yourOrders/YourOrdersColumn";
 import YourOrdersHeader from "../components/yourOrders/YourOrdersHeader";
 import {ClassNames} from "../components/utils/UtilFunctions";
 import {imageUrl} from "../components/utils/Image";
+import axios from "axios";
+import {decodeToken, isExpired} from "react-jwt";
 
 const YourOrdersPage = () => {
     const [myOrders, setMyOrders] = useState([]);
     const [noOrders, setNoOrders] = useState(false);
     const [noOrdersSpinner, setNoOrdersSpinner] = useState(true);
     const [showModal, setShowModal] = useState(-1);
-
+    const decodedToken = decodeToken(localStorage.getItem('token'))
     const {user, loginWithRedirect} = useAuth0();
     useEffect(() => {
-        user && getOrders();
-    }, [user]);
+        decodedToken && getOrders();
+    }, []);
 
     const getOrders = async () => {
-        const REALM_APP_ID = 'syklykbis-ogied';
-        const app = new Realm.App({id: REALM_APP_ID});
-        const credentials = Realm.Credentials.anonymous();
-        try {
-            const userMongo = await app.logIn(credentials);
-            const allUserOrders = await userMongo.functions.getUserOrders({
-                email: user?.email
+        axios({
+            url: 'http://localhost:3001/orders',
+            method: 'POST',
+            data: {
+                userEmail: decodedToken.name
+            }
+        }).then(function (response) {
+            console.log("resp ", response.data)
+            setMyOrders(response.data);
+        })
+            .catch(function (error) {
+                console.log(error);
             });
-            setMyOrders(allUserOrders);
-        } catch (error) {
-            console.log(error);
-        }
+
+        // const REALM_APP_ID = 'syklykbis-ogied';
+        // const app = new Realm.App({id: REALM_APP_ID});
+        // const credentials = Realm.Credentials.anonymous();
+        // try {
+        //     const userMongo = await app.logIn(credentials);
+        //     const allUserOrders = await userMongo.functions.getUserOrders({
+        //         email: user?.email
+        //     });
+        //     setMyOrders(allUserOrders);
+        // } catch (error) {
+        //     console.log(error);
+        // }
     };
 
     return (
@@ -96,7 +112,7 @@ const YourOrdersPage = () => {
                         </div>}
                     />
                 </div>
-                {user ? (
+                {decodedToken.name ? (
                     <div>
                         {myOrders.length > 0 ? (
                             myOrders.map((item, index) => {
@@ -128,7 +144,7 @@ const YourOrdersPage = () => {
                                                         alt='identyfikator zamówienia'
                                                     />
                                                 </div>}
-                                                value={item._id.toString()}
+                                                value={item.id.toString()}
                                                 copySign
                                                 classes='px-4'
                                                 idClasses='lg:w-52 lg:truncate pr-2'
@@ -163,6 +179,7 @@ const YourOrdersPage = () => {
                                 );
                             })
                         ) : (
+
                             <div className='flex flex-col items-center p-5'>
                                 <p className='hidden'>
                                     {' '}
@@ -173,6 +190,7 @@ const YourOrdersPage = () => {
                                     {setTimeout(() => setNoOrdersSpinner(false), 3000)}
                                 </p>
                                 {noOrders && (
+
                                     <h1 className='font-semibold uppercase'>Brak zamówień</h1>
                                 )}
                                 {noOrdersSpinner && (

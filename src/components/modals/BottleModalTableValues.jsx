@@ -5,6 +5,7 @@ export default function BottleModalTableValues({ data }) {
     return (
         <div className="select-none font-semibold">
             {data.tableValues.map((value, index) => {
+                // console.log("val ",value)
                 return (
                     <div key={index}>
                         {[
@@ -19,7 +20,9 @@ export default function BottleModalTableValues({ data }) {
                             value.witaminaC,
                         ]
                             .filter((value) => !!value)
-                            .map((productValue, index) => (
+                            .map((productValue, index) => {
+                                console.log("productValue ", productValue)
+                                return (
                                 <p
                                     className={ClassNames(
                                         'pl-2 w-full pr-2 text-right',
@@ -29,7 +32,7 @@ export default function BottleModalTableValues({ data }) {
                                 >
                                     {productValue}
                                 </p>
-                            ))}
+                            )})}
                         {[
                             value.kationy,
                             value.wapniowy,

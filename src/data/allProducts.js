@@ -1152,3 +1152,7 @@ export default allProductsData;
 export function getProductsByCategory(categoryUrl) {
     return allProductsData.filter((bd) => bd.category === categoryUrl);
 }
+
+// export function getProductsByCategory(products, categoryUrl) {
+//     return products.filter((bd) => bd.category === categoryUrl);
+// }

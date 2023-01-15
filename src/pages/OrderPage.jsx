@@ -1,4 +1,4 @@
-import { useAuth0 } from "@auth0/auth0-react";
+import {useAuth0} from "@auth0/auth0-react";
 import React, {useState} from 'react';
 import * as Realm from 'realm-web';
 
@@ -13,6 +13,8 @@ import OrderMap from "../components/order/OrderMap";
 import allProductsData from "../data/allProducts";
 import {imageUrl} from "../components/utils/Image";
 import {format} from 'date-fns';
+import axios from "axios";
+import {decodeToken, isExpired} from "react-jwt";
 
 function emptyArray(size) {
     const arr = [];
@@ -30,6 +32,8 @@ const Order = () => {
     const [showConfirmModal, setShowConfirmModal] = useState(-1);
     const {user, loginWithRedirect} = useAuth0();
     const [showThanksModal, setShowThanksModal] = useState(-1);
+    const isExp = isExpired(localStorage.getItem('token'))
+    const decodedToken = decodeToken(localStorage.getItem('token'))
 
     const iconRemap = {
         '[NIEGAZ]': {
@@ -115,9 +119,6 @@ const Order = () => {
     }
 
     const saveOrderToDb = async () => {
-        const REALM_APP_ID = 'syklykbis-ogied';
-        const app = new Realm.App({id: REALM_APP_ID});
-        const credentials = Realm.Credentials.anonymous();
 
         const orderedProducts = allProductsData
             .filter((pd) => {
@@ -134,19 +135,54 @@ const Order = () => {
                 };
             });
 
-        const order = {
-            orderedProducts,
-            placementDate: format(new Date(), 'dd/MM/yyyy'),
-            totalPrice: finalPrice().toFixed(2),
-            email: user?.email
-        };
+        axios({
+            url: 'http://localhost:3001/makeOrder',
+            method: 'POST',
+            data: {
+                orderedProducts,
+                placementDate: format(new Date(), 'dd/MM/yyyy'),
+                totalPrice: finalPrice().toFixed(2),
+                email: decodedToken.name
+            }
+        }).then(function (response) {
+            console.log(response);
+        })
+            .catch(function (error) {
+                console.log(error);
+            });
 
-        try {
-            const userMongo = await app.logIn(credentials);
-            await userMongo.functions.saveOrder(order);
-        } catch (error) {
-            console.log(error);
-        }
+        // const REALM_APP_ID = 'syklykbis-ogied';
+        // const app = new Realm.App({id: REALM_APP_ID});
+        // const credentials = Realm.Credentials.anonymous();
+
+        // const orderedProducts = allProductsData
+        //     .filter((pd) => {
+        //         // odfiltrowanie niezamowionych produktow
+        //         return selectedProductsAmount[pd.id];
+        //     })
+        //     .map((pd) => {
+        //         const {id, name, hint} = pd;
+        //         return {
+        //             amount: selectedProductsAmount[id],
+        //             hint,
+        //             name,
+        //             productId: id
+        //         };
+        //     });
+
+        // const order = {
+        //     orderedProducts,
+        //     placementDate: format(new Date(), 'dd/MM/yyyy'),
+        //     totalPrice: finalPrice().toFixed(2),
+        //     email: user?.email
+        // };
+
+        // try {
+        //     const userMongo = await app.logIn(credentials);
+        //     await userMongo.functions.saveOrder(order);
+        // } catch (error) {
+        //     console.log(error);
+        // }
     };
 
     const confirmOrder = () => {
@@ -197,7 +233,7 @@ const Order = () => {
                 />
             )}
 
-            {!user && showModal === -1 && (
+            {isExp && showModal === -1 && (
                 <NotLoggedModal
                     onClickClose={() => {
                         setShowModal(1);

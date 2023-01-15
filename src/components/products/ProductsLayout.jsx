@@ -4,10 +4,32 @@ import { BottleModal} from "../modals/BottleModal";
 import allProductsData, {getProductsByCategory} from "../../data/allProducts";
 import { imageUrl} from "../utils/Image";
 import { ClassNames} from "../utils/UtilFunctions";
+import axios from "axios";
+import {useEffect} from 'react';
 
 
 function ProductsLayout({ categoryUrl, className, color }) {
     const [bottleIndex, setBottleIndex] = useState(-1);
+    console.log("cat rul ", categoryUrl)
+    const [products, setProducts] = useState([])
+    const getAllProductsByCategory = () => {
+        axios({
+            method: 'post',
+            url: 'http://localhost:3001/products/:category',
+            data: {
+                category: categoryUrl,
+            }
+        }).then((response) => {
+            console.log("category url: ", response.data)
+            setProducts(response.data)
+            // ReloadButton();
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+    useEffect(() => {
+        categoryUrl && getAllProductsByCategory();
+    }, []);
 
     function BottleDisplay({ id, bottle, name }) {
         return (

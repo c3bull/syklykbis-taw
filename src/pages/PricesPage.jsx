@@ -3,14 +3,15 @@ import {useState} from 'react';
 
 import {NotLoggedModal} from "../components/modals/NotLoggedModal";
 import {Prices} from "../components/prices/Prices";
+import {isExpired} from "react-jwt";
 
 const PricesPage = () => {
     const {user,loginWithRedirect} = useAuth0();
     const [showModal, setShowModal] = useState(-1);
-
+    const isExp = isExpired(localStorage.getItem('token'))
     return (
         <div>
-            {!user && showModal === -1 && (
+            {isExp && showModal === -1 && (
                 <NotLoggedModal
                     onClickClose={() => {
                         setShowModal(1);

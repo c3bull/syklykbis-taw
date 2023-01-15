@@ -4,10 +4,11 @@ import PricesSideButtons from "./PricesSideButtons";
 import {getProductsByCategory} from "../../data/allProducts";
 import {imageUrl} from "../utils/Image";
 import {ClassNames} from "../utils/UtilFunctions";
+import {isExpired} from "react-jwt";
 
 export function Prices({title, color, category, classes}) {
     const {user} = useAuth0();
-
+    const isExp = isExpired(localStorage.getItem('token'))
     return (
         <div>
             <PricesSideButtons/>
@@ -50,7 +51,7 @@ export function Prices({title, color, category, classes}) {
                                 <p className="w-full border-b border-gray-400 pt-3 pb-6 uppercase lg:h-16 xl:h-auto">
                                     {item.name}
                                 </p>
-                                {user ? (
+                                {!isExp ? (
                                     <div
                                         className="flex w-full flex-col items-center justify-center bg-gray-100 pb-4 pt-2">
                                         <div className="flex w-full justify-center pt-2">

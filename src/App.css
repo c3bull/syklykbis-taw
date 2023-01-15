@@ -8,6 +8,14 @@
   pointer-events: none;
 }
 
+input:-webkit-autofill {
+  background-color: #FAFFBD !important;
+}
+
+input:-webkit-autofill {
+  border: 3px solid darkorange;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
