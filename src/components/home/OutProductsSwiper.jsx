@@ -4,14 +4,24 @@ import React, { useEffect, useState } from 'react';
 import { Autoplay } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SectionHeader from "../common/SectionHeader";
-import allProductsData from "../../data/allProducts";
 import {imageUrl} from "../utils/Image";
+import axios from "axios";
 
 export default function OurProductsSwiper({ goToProducts }) {
-    const [allProducts, setAllProducts] = useState(allProductsData);
-
+    const [allProducts, setAllProducts] = useState([]);
+    const getAllProducts = () => {
+        axios({
+            method: 'get',
+            url: 'http://localhost:3001/products',
+        }).then((response) => {
+            console.log("category url: ", response.data)
+            setAllProducts(shuffle(response.data))
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
     useEffect(() => {
-        setAllProducts(shuffle(allProductsData));
+        getAllProducts();
     }, []);
 
     return (

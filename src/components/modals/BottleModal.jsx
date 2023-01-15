@@ -7,7 +7,6 @@ import { imageUrl} from "../utils/Image";
 export function BottleModal(props) {
     const { data, onClick } = props;
 
-
     return (
         <Modal title={data.name} classes="items-center" closeModal={onClick}>
             <div className="flex flex-col items-center justify-center md:flex-row md:py-5">

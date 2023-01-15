@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { BottleModal} from "../modals/BottleModal";
-import allProductsData, {getProductsByCategory} from "../../data/allProducts";
+import allProductsData, {getProductsByCategory, getProductsByCategoryFetched} from "../../data/allProducts";
 import { imageUrl} from "../utils/Image";
 import { ClassNames} from "../utils/UtilFunctions";
 import axios from "axios";
@@ -31,13 +31,13 @@ function ProductsLayout({ categoryUrl, className, color }) {
         categoryUrl && getAllProductsByCategory();
     }, []);
 
-    function BottleDisplay({ id, bottle, name }) {
+    function BottleDisplay({ id, bottle, name, index}) {
         return (
             <article>
                 <div
                     className='flex cursor-pointer items-center justify-center p-3'
                     onClick={() => {
-                        setBottleIndex(id);
+                        setBottleIndex(index);
                     }}
                 >
                     <div
@@ -63,7 +63,7 @@ function ProductsLayout({ categoryUrl, className, color }) {
         <div className='flex h-auto items-center justify-center pt-16 pb-24 md:pt-24 lg:pt-36'>
             {bottleIndex !== -1 && (
                 <BottleModal
-                    data={allProductsData[bottleIndex]}
+                    data={products[bottleIndex]}
                     onClick={() => {
                         setBottleIndex(-1);
                     }}
@@ -72,8 +72,8 @@ function ProductsLayout({ categoryUrl, className, color }) {
             <div
                 className={ClassNames('grid grid-cols-1', className, 'gap-1 sm:gap-6')}
             >
-                {getProductsByCategory(categoryUrl).map(({ id, bottle, name }) => (
-                    <BottleDisplay id={id} bottle={bottle} name={name} key={id} />
+                {getProductsByCategoryFetched(products, categoryUrl).map(({ id, bottle, name }, index) => (
+                    <BottleDisplay id={id} bottle={bottle} name={name} key={id} index={index} />
                 ))}
             </div>
         </div>

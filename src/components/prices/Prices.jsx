@@ -1,14 +1,37 @@
 import {useAuth0} from "@auth0/auth0-react";
 
 import PricesSideButtons from "./PricesSideButtons";
-import {getProductsByCategory} from "../../data/allProducts";
+import {getProductsByCategory, getProductsByCategoryFetched} from "../../data/allProducts";
 import {imageUrl} from "../utils/Image";
 import {ClassNames} from "../utils/UtilFunctions";
 import {isExpired} from "react-jwt";
+import axios from "axios";
+import {useEffect, useState} from "react";
 
 export function Prices({title, color, category, classes}) {
     const {user} = useAuth0();
     const isExp = isExpired(localStorage.getItem('token'))
+    const [products, setProducts] = useState([])
+
+    const getAllProductsByCategory = () => {
+        axios({
+            method: 'post',
+            url: 'http://localhost:3001/products/:category',
+            data: {
+                category: category,
+            }
+        }).then((response) => {
+            console.log("category url: ", response.data)
+            setProducts(response.data)
+            // ReloadButton();
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+    useEffect(() => {
+        category && getAllProductsByCategory();
+    }, []);
+
     return (
         <div>
             <PricesSideButtons/>
@@ -23,7 +46,7 @@ export function Prices({title, color, category, classes}) {
                         'gap-4'
                     )}
                 >
-                    {getProductsByCategory(`${category}`).map((item) => {
+                    {getProductsByCategoryFetched(products, `${category}`).map((item) => {
                         return (
                             <div
                                 className={ClassNames(
