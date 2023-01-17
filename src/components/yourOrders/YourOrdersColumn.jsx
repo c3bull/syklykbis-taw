@@ -9,6 +9,7 @@ export default function YourOrdersColumn({
                                              classes,
                                              copySign,
                                              idClasses,
+                                             onClickDelete,
                                          }) {
 
     return (
@@ -22,7 +23,7 @@ export default function YourOrdersColumn({
                     `${classes}`
                 )}
             >
-                <div className={ClassNames(`${idClasses}`)}>{value}</div>
+                {!onClickDelete && <div className={ClassNames(`${idClasses}`)}>{value}</div>}
                 {copySign && (
                     <div
                         className="cursor-pointer "
@@ -37,6 +38,25 @@ export default function YourOrdersColumn({
                         <div className='w-4 h-4 flex items-center mb-1 duration-100 hover:scale-110 active:border'>
                             <img
                                 src={imageUrl('icons/AiOutlineCopy.png')}
+                                width='16px'
+                                height='16px'
+                                alt='kopiuj'
+                            />
+                        </div>
+                    </div>
+                )}
+                {onClickDelete && (
+                    <div
+                        className="cursor-pointer "
+                        onClick={() => {
+                            {
+                                console.log('value ',value)
+                            }
+                        }}
+                    >
+                        <div className='w-4 h-4 flex items-center duration-100 hover:scale-110 active:border'>
+                            <img
+                                src={imageUrl('icons/faTimes.png')}
                                 width='16px'
                                 height='16px'
                                 alt='kopiuj'

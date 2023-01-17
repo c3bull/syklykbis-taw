@@ -40,7 +40,7 @@ const YourOrdersPage = () => {
         <div>
             <div
                 className='mx-4 flex h-auto min-h-[50vh] flex-col items-center pt-32 pb-12 md:px-10 lg:pt-32 lg:pb-16 xl:pt-48 xl:pb-32'>
-                <div className='hidden lg:grid lg:grid-cols-[50px_150px_450px_100px_120px] lg:gap-2'>
+                <div className='hidden lg:grid lg:grid-cols-[50px_150px_450px_100px_120px_80px] lg:gap-2'>
                     <YourOrdersHeader
                         title='Lp.'
                         icon={<div className='w-4 h-4 flex items-center'>
@@ -96,6 +96,17 @@ const YourOrdersPage = () => {
                             />
                         </div>}
                     />
+                    <YourOrdersHeader
+                        title='Usuń'
+                        icon={<div className='w-4 h-4 flex items-center'>
+                            <img
+                                src={imageUrl('icons/MdDateRange.png')}
+                                width='16px'
+                                height='16px'
+                                alt='data zamówienia'
+                            />
+                        </div>}
+                    />
                 </div>
                 {decodedToken.name ? (
                     <div>
@@ -105,7 +116,7 @@ const YourOrdersPage = () => {
                                     <div className='my-3 flex lg:my-0' key={index}>
                                         <div
                                             className={ClassNames(
-                                                'w-full lg:grid lg:grid-cols-[50px_150px_450px_100px_120px] lg:gap-2 lg:mt-2',
+                                                'w-full lg:grid lg:grid-cols-[50px_150px_450px_100px_120px_80px] lg:gap-2 lg:mt-2',
                                                 `${index % 2 === 0 && 'bg-neutral-100'}`
                                             )}
                                         >
@@ -157,6 +168,19 @@ const YourOrdersPage = () => {
                                                     />
                                                 </div>}
                                                 value={item.placementDate}
+                                                classes='font-medium'
+                                            />
+                                            <YourOrdersColumn
+                                                icon={<div className='w-4 h-4 flex items-center'>
+                                                    <img
+                                                        src={imageUrl('icons/MdDateRange.png')}
+                                                        width='16px'
+                                                        height='16px'
+                                                        alt='data zamówienia'
+                                                    />
+                                                </div>}
+                                                value={item.id}
+                                                onClickDelete
                                                 classes='font-medium'
                                             />
                                         </div>
