@@ -111,7 +111,7 @@ const YourOrdersPage = () => {
                 {decodedToken.name ? (
                     <div>
                         {myOrders.length > 0 ? (
-                            myOrders.map((item, index) => {
+                            myOrders.slice(0).reverse().map((item, index) => {
                                 return (
                                     <div className='my-3 flex lg:my-0' key={index}>
                                         <div

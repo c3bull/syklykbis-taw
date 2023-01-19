@@ -1,6 +1,7 @@
 import {ClassNames} from "../utils/UtilFunctions";
 import {imageUrl} from "../utils/Image";
 import React from 'react';
+import axios from "axios";
 
 
 export default function YourOrdersColumn({
@@ -11,6 +12,21 @@ export default function YourOrdersColumn({
                                              idClasses,
                                              onClickDelete,
                                          }) {
+
+    const deleteOrder = (orderId) => {
+        axios({
+            method: 'delete',
+            url: 'http://localhost:3001/removeOrder',
+            data: {
+                orderId: orderId,
+            }
+        }).then((response) => {
+            window.location.reload(false);
+            console.log(response)
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
 
     return (
         <div className="my-1 flex items-center border border-gray-800 lg:my-0 lg:justify-center">
@@ -50,7 +66,7 @@ export default function YourOrdersColumn({
                         className="cursor-pointer "
                         onClick={() => {
                             {
-                                console.log('value ',value)
+                                deleteOrder(value)
                             }
                         }}
                     >

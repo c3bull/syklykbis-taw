@@ -179,6 +179,26 @@ export default function Navbar() {
                                                     </Link>
                                                 </Menu.Item>
                                                 <Menu.Item>
+                                                    <Link to='/zmien-haslo'>
+                                                        <div
+                                                            className='block cursor-pointer rounded border-hidden px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
+                                                            <div className='flex items-center'>
+                                                                <div className='flex items-center' aria-hidden='true'>
+                                                                    <img
+                                                                        src={imageUrl('icons/RiShoppingBasket2Line.png')}
+                                                                        width='13px'
+                                                                        height='13px'
+                                                                        alt='twoje zamówienia'
+                                                                    />
+                                                                </div>
+                                                                <p className='pl-1 font-medium'>
+                                                                    Zmień hasło
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </Link>
+                                                </Menu.Item>
+                                                <Menu.Item>
                                                     <a
                                                         className='cursor-pointer block rounded border-hidden px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
                                                         onClick={() => {

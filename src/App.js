@@ -16,6 +16,7 @@ import ScrollToTop from "./components/utils/ScrollToTop";
 import Sidebar from "./components/layouts/Sidebar";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ChangePassword from "./pages/ChangePassword";
 
 function App() {
     return (
@@ -38,6 +39,7 @@ function App() {
                         <Route path='/twoje-zamowienia' element={<YourOrdersPage/>}/>
                         <Route path='/zaloguj' element={<Login/>}/>
                         <Route path='/zarejestruj' element={<Register/>}/>
+                        <Route path='/zmien-haslo' element={<ChangePassword/>}/>
                     </Routes>
                 </ScrollToTop>
                 <Footer/>
