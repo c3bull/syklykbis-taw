@@ -12,8 +12,8 @@ import OrderMap from "../components/order/OrderMap";
 import {imageUrl} from "../components/utils/Image";
 import {format} from 'date-fns';
 import axios from "axios";
-import {decodeToken, isExpired} from "react-jwt";
-import {useEffect} from "react";
+import {decodeToken} from "react-jwt";
+import {gql, useQuery} from "@apollo/client";
 
 function emptyArray(size) {
     const arr = [];
@@ -31,23 +31,25 @@ const Order = () => {
     const [showConfirmModal, setShowConfirmModal] = useState(-1);
     const {loginWithRedirect} = useAuth0();
     const [showThanksModal, setShowThanksModal] = useState(-1);
-    const isExp = isExpired(localStorage.getItem('token'))
     const decodedToken = decodeToken(localStorage.getItem('token'))
-    const [allProducts, setAllProducts] = useState([]);
 
-    const getAllProducts = () => {
-        axios({
-            method: 'get',
-            url: 'http://localhost:3001/products',
-        }).then((response) => {
-            setAllProducts(response.data)
-        }).catch((error) => {
-            console.log(error);
-        });
+    const {user} = useAuth0();
+    const GET_ALL_PRODUCTS = gql`
+  query GetProducts {
+    product {
+      id
+        bottle
+        name
+        category
+        price
+        netPrice
+        vat
+        hint
+        number
     }
-    useEffect(() => {
-        getAllProducts();
-    }, []);
+  }
+`;
+    const {data} = useQuery(GET_ALL_PRODUCTS);
 
     const iconRemap = {
         '[NIEGAZ]': {
@@ -124,17 +126,17 @@ const Order = () => {
 
     function finalPrice() {
         let finalPrice = 0;
-        for (let i = 0; i < allProducts.length; i++) {
-            const data = allProducts[i];
+        for (let i = 0; i < data.product.length; i++) {
+            const productData = data.product[i];
             const amount = selectedProductsAmount[i];
-            finalPrice += amount * data.price;
+            finalPrice += amount * productData.price;
         }
         return finalPrice;
     }
 
     const saveOrderToDb = async () => {
 
-        const orderedProducts = allProducts
+        const orderedProducts = data.product
             .filter((pd) => {
                 // odfiltrowanie niezamowionych produktow
                 return selectedProductsAmount[pd.number];
@@ -173,10 +175,10 @@ const Order = () => {
 
     return (
         <div>
-            {showBasket && (
+            {data && showBasket && (
                 <BasketModal
                     data={[
-                        allProducts.map((item, index) => {
+                        data.product.map((item, index) => {
                             const amount = selectedProductsAmount[index];
 
                             if (!amount) {
@@ -214,7 +216,7 @@ const Order = () => {
                 />
             )}
 
-            {isExp && showModal === -1 && (
+            {!user && showModal === -1 && (
                 <NotLoggedModal
                     onClickClose={() => {
                         setShowModal(1);
@@ -224,7 +226,7 @@ const Order = () => {
                 />
             )}
 
-            {showConfirmModal === 1 && (
+            {data && showConfirmModal === 1 && (
                 <ConfirmModal
                     onClickClose={() => {
                         setShowBasket(false);
@@ -233,7 +235,7 @@ const Order = () => {
                     onClickOrder={() => {
                         saveOrderToDb();
                     }}
-                    products={allProducts.map((item, index) => {
+                    products={data.product.map((item, index) => {
                         const amount = selectedProductsAmount[index];
 
                         if (!amount) {
@@ -254,7 +256,7 @@ const Order = () => {
                             </div>
                         );
                     })}
-                    productsToSave={allProducts
+                    productsToSave={data.product
                         .filter((pd) => {
                             return selectedProductsAmount[pd.number];
                         })
@@ -278,7 +280,7 @@ const Order = () => {
             {/* KOSZYK WIDOCZNY PRZY ROZDZIELCZOSCI MNIEJSZEJ NIŻ XL */}
             <LittleBasket setShowBasket={() => setShowBasket(true)}/>
 
-            <div className='flex select-none justify-center'>
+            {data && <div className='flex select-none justify-center'>
                 <div className='grid gap-6 px-10 pt-8 pb-16 2xl:grid-cols-[70%_minmax(30%,1fr)]'>
                     <OrderMap/>
                     <OrderCategoryLayout
@@ -385,6 +387,7 @@ const Order = () => {
                     <div/>
                 </div>
             </div>
+            }
             <div/>
         </div>
     );

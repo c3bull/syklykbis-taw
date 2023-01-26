@@ -1,34 +1,73 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
-import { BottleModal} from "../modals/BottleModal";
+import {BottleModal} from "../modals/BottleModal";
 import {getProductsByCategoryFetched} from "../../data/allProducts";
-import { imageUrl} from "../utils/Image";
-import { ClassNames} from "../utils/UtilFunctions";
-import axios from "axios";
-import {useEffect} from 'react';
+import {imageUrl} from "../utils/Image";
+import {ClassNames} from "../utils/UtilFunctions";
+import {gql, useQuery} from "@apollo/client";
 
 
-function ProductsLayout({ categoryUrl, className, color }) {
+function ProductsLayout({categoryUrl, className, color}) {
     const [bottleIndex, setBottleIndex] = useState(-1);
-    const [products, setProducts] = useState([])
-    const getAllProductsByCategory = () => {
-        axios({
-            method: 'post',
-            url: 'http://localhost:3001/products/:category',
-            data: {
-                category: categoryUrl,
-            }
-        }).then((response) => {
-            setProducts(response.data)
-        }).catch((error) => {
-            console.log(error);
-        });
-    }
-    useEffect(() => {
-        categoryUrl && getAllProductsByCategory();
-    }, []);
 
-    function BottleDisplay({ bottle, name, index}) {
+    const GET_PRODUCTS_BY_CATEGORY = gql`
+  query GetProducts {
+    product(category: "${categoryUrl}") {
+      id
+      number
+      name
+      bottle
+      category
+      tableLabels {
+        wartoscOdzywcza
+        wartoscEnergetyczna
+        tluszcz
+        wTymKwasyNasycone
+        weglowodany
+        wTymCukry
+        bialko
+        sol
+        kationy
+        wapniowy
+        magnezowy
+        sodowy
+        potasowy
+        aniony
+        wodoroweglanowy
+        siarczanowy
+        chlorkowy
+        fluorkowy
+        suma
+      }
+      tableValues {
+      wartoscOdzywcza
+        wartoscEnergetyczna
+        tluszcz
+        wTymKwasyNasycone
+        weglowodany
+        wTymCukry
+        bialko
+        sol
+        kationy
+        wapniowy
+        magnezowy
+        sodowy
+        potasowy
+        aniony
+        wodoroweglanowy
+        siarczanowy
+        chlorkowy
+        fluorkowy
+        suma
+      }
+    }
+  }
+`;
+
+
+    const {data} = useQuery(GET_PRODUCTS_BY_CATEGORY);
+
+    function BottleDisplay({bottle, name, index}) {
         return (
             <article>
                 <div
@@ -60,7 +99,7 @@ function ProductsLayout({ categoryUrl, className, color }) {
         <div className='flex h-auto items-center justify-center pt-16 pb-24 md:pt-24 lg:pt-36'>
             {bottleIndex !== -1 && (
                 <BottleModal
-                    data={products[bottleIndex]}
+                    data={data.product[bottleIndex]}
                     onClick={() => {
                         setBottleIndex(-1);
                     }}
@@ -69,8 +108,8 @@ function ProductsLayout({ categoryUrl, className, color }) {
             <div
                 className={ClassNames('grid grid-cols-1', className, 'gap-1 sm:gap-6')}
             >
-                {getProductsByCategoryFetched(products, categoryUrl).map(({ id, bottle, name }, index) => (
-                    <BottleDisplay id={id} bottle={bottle} name={name} key={id} index={index} />
+                {data && getProductsByCategoryFetched(data.product, categoryUrl).map(({id, bottle, name}, index) => (
+                    <BottleDisplay id={id} bottle={bottle} name={name} key={id} index={index}/>
                 ))}
             </div>
         </div>

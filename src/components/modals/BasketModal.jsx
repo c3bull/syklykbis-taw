@@ -1,11 +1,11 @@
 import Modal from "./Modal";
 import {imageUrl} from "../utils/Image";
 import React from 'react';
-import {isExpired} from "react-jwt";
+import {useAuth0} from "@auth0/auth0-react";
 
 export function BasketModal(props) {
     const {data, onClick, bottleAmount, finalPrice, confirmOrder} = props;
-    const isExp = isExpired(localStorage.getItem('token'))
+    const {user} = useAuth0();
     return (
         <Modal
             classes="items-center justify-center overflow-auto"
@@ -14,7 +14,7 @@ export function BasketModal(props) {
         >
             <div className="flex flex-col sm:w-96">
                 <div className="flex w-full flex-col justify-center rounded-md border border-gray-400 p-2">
-                    {!isExp && (
+                    {user && (
                         <div>
                             <div
                                 className='w-full flex items-center text-center justify-center'>

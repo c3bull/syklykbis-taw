@@ -14,37 +14,35 @@ import Footer from "./components/footer/Footer";
 import YourOrdersPage from "./pages/YourOrdersPage";
 import ScrollToTop from "./components/utils/ScrollToTop";
 import Sidebar from "./components/layouts/Sidebar";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import ChangePassword from "./pages/ChangePassword";
+import {client} from "./ApolloClient/client";
+import {ApolloProvider} from '@apollo/client';
 
 function App() {
     return (
-        <Auth0Provider
-            domain="dev-ppzur0y36edjbnm2.eu.auth0.com"
-            clientId="8RCOXjGtKc5qFwZlTWILu9l45xwBpHlb"
-            redirectUri={window.location.origin}>
-            <BrowserRouter>
-                <Navbar/>
-                <Sidebar/>
-                <ScrollToTop>
-                    <Routes>
-                        <Route path='/' element={<Home/>}/>
-                        <Route path='/o-nas' element={<About/>}/>
-                        <Route path='/kontakt' element={<Contact/>}/>
-                        <Route path='/produkty' element={<Products/>}/>
-                        <Route path='/cennik' element={<PricesPage/>}/>
-                        <Route path='/zamow' element={<OrderPage/>}/>
-                        <Route path='/produkty/:category' element={<ProductsDetails/>}/>
-                        <Route path='/twoje-zamowienia' element={<YourOrdersPage/>}/>
-                        <Route path='/zaloguj' element={<Login/>}/>
-                        <Route path='/zarejestruj' element={<Register/>}/>
-                        <Route path='/zmien-haslo' element={<ChangePassword/>}/>
-                    </Routes>
-                </ScrollToTop>
-                <Footer/>
-            </BrowserRouter>
-        </Auth0Provider>
+        <ApolloProvider client={client}>
+            <Auth0Provider
+                domain="dev-ppzur0y36edjbnm2.eu.auth0.com"
+                clientId="8RCOXjGtKc5qFwZlTWILu9l45xwBpHlb"
+                redirectUri={window.location.origin}>
+                <BrowserRouter>
+                    <Navbar/>
+                    <Sidebar/>
+                    <ScrollToTop>
+                        <Routes>
+                            <Route path='/' element={<Home/>}/>
+                            <Route path='/o-nas' element={<About/>}/>
+                            <Route path='/kontakt' element={<Contact/>}/>
+                            <Route path='/produkty' element={<Products/>}/>
+                            <Route path='/cennik' element={<PricesPage/>}/>
+                            <Route path='/zamow' element={<OrderPage/>}/>
+                            <Route path='/produkty/:category' element={<ProductsDetails/>}/>
+                            <Route path='/twoje-zamowienia' element={<YourOrdersPage/>}/>
+                        </Routes>
+                    </ScrollToTop>
+                    <Footer/>
+                </BrowserRouter>
+            </Auth0Provider>
+        </ApolloProvider>
     );
 }
 

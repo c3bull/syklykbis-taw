@@ -1,16 +1,11 @@
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import HomeSwiper from "../components/home/HomeSwiper";
 import OurProductsSwiper from "../components/home/OutProductsSwiper";
 import HomeMakeAndOrder from "../components/home/HomeMakeAnOrder";
 
-
 const Home = () => {
-    //TODO
-    // - inne zdjęcia w pierwszym sliderze
-    // - nie jestes robotem ReCaptcha
 
     const navigate = useNavigate();
-
     const goToProducts = () => {
         navigate("/produkty");
     };
@@ -18,6 +13,7 @@ const Home = () => {
     const goToOrder = () => {
         navigate("/zamow");
     };
+
     return (
         <>
             <HomeSwiper />

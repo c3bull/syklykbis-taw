@@ -1,8 +1,7 @@
 import React from 'react';
 import {imageUrl} from "../utils/Image";
-import {isExpired} from "react-jwt";
-import {useEffect, useState} from "react";
-import axios from "axios";
+import {useAuth0} from "@auth0/auth0-react";
+import {gql, useQuery} from "@apollo/client";
 
 
 export default function BasketXL({
@@ -11,22 +10,23 @@ export default function BasketXL({
                                      confirmOrder,
                                      finalPrice,
                                  }) {
-    const isExp = isExpired(localStorage.getItem('token'))
-
-    const [allProducts, setAllProducts] = useState([]);
-    const getAllProducts = () => {
-        axios({
-            method: 'get',
-            url: 'http://localhost:3001/products',
-        }).then((response) => {
-            setAllProducts(response.data)
-        }).catch((error) => {
-            console.log(error);
-        });
+    const {user} = useAuth0();
+    const GET_ALL_PRODUCTS = gql`
+  query GetProducts {
+    product {
+      id
+        bottle
+        name
+        category
+        price
+        netPrice
+        vat
+        hint
+        number
     }
-    useEffect(() => {
-        getAllProducts();
-    }, []);
+  }
+`;
+    const {data} = useQuery(GET_ALL_PRODUCTS);
 
     const iconRemap = {
         '[NIEGAZ]': {
@@ -90,7 +90,7 @@ export default function BasketXL({
         <div
             className="fixed right-28 top-[15%] hidden w-96 flex-col items-center justify-center rounded-lg border border-gray-400 bg-white px-5 pb-5 drop-shadow-2xl 2xl:flex">
             <div className="mt-4 flex w-full flex-col justify-center rounded-md border border-gray-400 p-2">
-                {!isExp && (
+                {user && (
                     <div>
                         <div
                             className='w-full flex items-center text-center justify-center'>
@@ -138,7 +138,7 @@ export default function BasketXL({
 
             <div
                 className="flex h-full max-h-[20vh] w-full flex-col gap-4 overflow-auto scrollbar-thin scrollbar-thumb-primary">
-                {allProducts.map((item, index) => {
+                {data && data.product.map((item, index) => {
                     const amount = selectedProductsAmount[index];
 
                     if (!amount) {

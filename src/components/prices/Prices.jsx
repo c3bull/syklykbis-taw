@@ -2,30 +2,26 @@ import PricesSideButtons from "./PricesSideButtons";
 import {getProductsByCategoryFetched} from "../../data/allProducts";
 import {imageUrl} from "../utils/Image";
 import {ClassNames} from "../utils/UtilFunctions";
-import {isExpired} from "react-jwt";
-import axios from "axios";
-import {useEffect, useState} from "react";
+import {gql, useQuery} from "@apollo/client";
+import {useAuth0} from "@auth0/auth0-react";
 
 export function Prices({title, color, category, classes}) {
-    const isExp = isExpired(localStorage.getItem('token'))
-    const [products, setProducts] = useState([])
-
-    const getAllProductsByCategory = () => {
-        axios({
-            method: 'post',
-            url: 'http://localhost:3001/products/:category',
-            data: {
-                category: category,
-            }
-        }).then((response) => {
-            setProducts(response.data)
-        }).catch((error) => {
-            console.log(error);
-        });
+    const {user} = useAuth0();
+    const GET_PRODUCTS_BY_CATEGORY = gql`
+  query GetProducts {
+    product(category: "${category}") {
+      id
+      vat
+      number
+      name
+      bottle
+      category
+      price
+      netPrice
     }
-    useEffect(() => {
-        category && getAllProductsByCategory();
-    }, []);
+  }
+`;
+    const {data} = useQuery(GET_PRODUCTS_BY_CATEGORY);
 
     return (
         <div>
@@ -41,7 +37,7 @@ export function Prices({title, color, category, classes}) {
                         'gap-4'
                     )}
                 >
-                    {getProductsByCategoryFetched(products, `${category}`).map((item) => {
+                    {data && getProductsByCategoryFetched(data.product, `${category}`).map((item) => {
                         return (
                             <div
                                 className={ClassNames(
@@ -69,7 +65,7 @@ export function Prices({title, color, category, classes}) {
                                 <p className="w-full border-b border-gray-400 pt-3 pb-6 uppercase lg:h-16 xl:h-auto">
                                     {item.name}
                                 </p>
-                                {!isExp ? (
+                                {user ? (
                                     <div
                                         className="flex w-full flex-col items-center justify-center bg-gray-100 pb-4 pt-2">
                                         <div className="flex w-full justify-center pt-2">

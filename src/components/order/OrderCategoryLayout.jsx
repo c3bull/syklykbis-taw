@@ -3,9 +3,8 @@ import PricesSideButtons from "../prices/PricesSideButtons";
 import {getProductsByCategoryFetched} from "../../data/allProducts";
 import { imageUrl} from "../utils/Image";
 import { ClassNames} from "../utils/UtilFunctions";
-import {isExpired} from "react-jwt";
-import {useEffect, useState} from "react";
-import axios from "axios";
+import {gql, useQuery} from "@apollo/client";
+import {useAuth0} from "@auth0/auth0-react";
 
 
 export function OrderCategoryLayout(props) {
@@ -18,26 +17,25 @@ export function OrderCategoryLayout(props) {
         classes,
         icon,
     } = props;
-    const isExp = isExpired(localStorage.getItem('token'))
+    const {user} = useAuth0();
 
-    const [products, setProducts] = useState([])
-
-    const getAllProductsByCategory = () => {
-        axios({
-            method: 'post',
-            url: 'http://localhost:3001/products/:category',
-            data: {
-                category: category,
-            }
-        }).then((response) => {
-            setProducts(response.data)
-        }).catch((error) => {
-            console.log(error);
-        });
+    const GET_PRODUCTS_BY_CATEGORY = gql`
+  query GetProducts {
+    product(category: "${category}") {
+      id
+      bottle
+        name
+        category
+        price
+        netPrice
+        vat
+        hint
+        number
     }
-    useEffect(() => {
-        category && getAllProductsByCategory();
-    }, []);
+  }
+`;
+
+    const {data} = useQuery(GET_PRODUCTS_BY_CATEGORY);
 
     return (
         <>
@@ -53,7 +51,7 @@ export function OrderCategoryLayout(props) {
                         classes
                     )}
                 >
-                    {getProductsByCategoryFetched(products, category).map((item) => {
+                    {data && getProductsByCategoryFetched(data.product, category).map((item) => {
                         return (
                             <div
                                 className="flex h-auto w-auto flex-col items-center rounded border border-gray-400 from-transparent
@@ -73,7 +71,7 @@ export function OrderCategoryLayout(props) {
                                     item={item}
                                 />
                                 <div className="flex w-full items-center justify-center py-5">
-                                    {!isExp && (
+                                    {user && (
                                         <div>
                                             <div className="flex justify-center">
                                                 <p className="font-bold text-primary">

@@ -1,27 +1,25 @@
 import 'swiper/css';
 import shuffle from 'lodash/shuffle';
-import React, { useEffect, useState } from 'react';
-import { Autoplay } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import React, {useEffect, useState} from 'react';
+import {Autoplay} from 'swiper';
+import {Swiper, SwiperSlide} from 'swiper/react';
 import SectionHeader from "../common/SectionHeader";
 import {imageUrl} from "../utils/Image";
-import axios from "axios";
+import {gql, useQuery} from "@apollo/client";
 
-export default function OurProductsSwiper({ goToProducts }) {
-    const [allProducts, setAllProducts] = useState([]);
-    const getAllProducts = () => {
-        axios({
-            method: 'get',
-            url: 'http://localhost:3001/products',
-        }).then((response) => {
-            setAllProducts(shuffle(response.data))
-        }).catch((error) => {
-            console.log(error);
-        });
+
+const GET_ALL_PRODUCTS = gql`
+  query GetProducts {
+    product {
+      id
+    bottle
+    number
     }
-    useEffect(() => {
-        getAllProducts();
-    }, []);
+  }
+`;
+
+export default function OurProductsSwiper({goToProducts}) {
+    const {data} = useQuery(GET_ALL_PRODUCTS);
 
     return (
         <div className="m-0 flex justify-center">
@@ -39,11 +37,11 @@ export default function OurProductsSwiper({ goToProducts }) {
                     className="relative max-h-[90vh] w-full"
                     modules={[Autoplay]}
                     slidesPerView={8}
-                    autoplay={{ delay: 1300 }}
+                    autoplay={{delay: 1300}}
                     loop={true}
                     speed={500}
                 >
-                    {allProducts.map((item) => {
+                    {data && shuffle(data.product).map((item) => {
                         return (
                             <SwiperSlide key={item.id}>
                                 <img

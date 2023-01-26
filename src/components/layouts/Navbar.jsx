@@ -1,34 +1,12 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import {Disclosure, Menu, Transition} from '@headlessui/react';
 import React, {Fragment} from 'react';
 
 import {imageUrl} from "../utils/Image";
 import {Link} from "react-router-dom";
-import {decodeToken, isExpired} from "react-jwt";
-import axios from "axios";
 
 export default function Navbar() {
-    const isExp = isExpired(localStorage.getItem('token'))
-    const decodedToken = decodeToken(localStorage.getItem('token'))
-
-    const LogOutButton = () => {
-        axios({
-            url: 'http://localhost:3001/api/user/logout/:userId',
-            method: 'delete',
-            data: {
-                userId: decodedToken.userId
-            }
-        })
-            .then((response) => {
-                if (response.data.deletedCount === 1) {
-                    localStorage.removeItem('token');
-                    window.location.reload(false);
-                }
-            })
-            .catch(() => {
-                console.log('Internal server error');
-            });
-    };
-
+    const {user, loginWithRedirect, logout } = useAuth0();
     const links = [
         {
             id: 1,
@@ -133,17 +111,31 @@ export default function Navbar() {
                             <div
                                 className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
                                 {/* Profile dropdown */}
-                                {!isExp ? (
+                                {!user ? (
+                                    <a
+                                        className='cursor-pointer flex items-center rounded border-hidden px-3 py-1.5 text-white hover:bg-gray-700'
+                                        onClick={loginWithRedirect}
+                                    >
+                                        <div className='flex items-center' aria-hidden='true'>
+                                            <img
+                                                src={imageUrl('icons/IoLogInOutline.png')}
+                                                width='16px'
+                                                height='16px'
+                                                alt='zaloguj'
+                                            />
+                                        </div>
+                                        <p className='pl-1 font-semibold'>Zaloguj</p>
+                                    </a>
+                                ) : (
                                     <Menu as='div' className='relative ml-3'>
                                         <div>
                                             <Menu.Button
                                                 className='flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'>
                                                 <span className='sr-only'>Open user menu</span>
                                                 <img
-                                                    src={imageUrl('icons/defaultAvatar.png')}
-                                                    width='50px'
-                                                    height='50px'
-                                                    alt='twoje zamówienia'
+                                                    className='h-auto w-12 rounded-full'
+                                                    src={`${user.picture}`}
+                                                    alt='profil'
                                                 />
                                             </Menu.Button>
                                         </div>
@@ -179,30 +171,10 @@ export default function Navbar() {
                                                     </Link>
                                                 </Menu.Item>
                                                 <Menu.Item>
-                                                    <Link to='/zmien-haslo'>
-                                                        <div
-                                                            className='block cursor-pointer rounded border-hidden px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
-                                                            <div className='flex items-center'>
-                                                                <div className='flex items-center' aria-hidden='true'>
-                                                                    <img
-                                                                        src={imageUrl('icons/RiShoppingBasket2Line.png')}
-                                                                        width='13px'
-                                                                        height='13px'
-                                                                        alt='twoje zamówienia'
-                                                                    />
-                                                                </div>
-                                                                <p className='pl-1 font-medium'>
-                                                                    Zmień hasło
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </Link>
-                                                </Menu.Item>
-                                                <Menu.Item>
                                                     <a
                                                         className='cursor-pointer block rounded border-hidden px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
                                                         onClick={() => {
-                                                            LogOutButton();
+                                                            logout({ returnTo: window.location.origin });
                                                         }}
                                                     >
                                                         <div className='flex items-center'>
@@ -222,13 +194,8 @@ export default function Navbar() {
                                                 </Menu.Item>
                                             </Menu.Items>
                                         </Transition>
-                                    </Menu>)
-                                    : false}
-                                {isExp ? <Link to='/zaloguj'>
-                                    <a className='cursor-pointer border-hidden text-white font-semibold'>
-                                        Zaloguj
-                                    </a>
-                                </Link> : false}
+                                    </Menu>
+                                )}
                             </div>
                         </div>
                     </div>
