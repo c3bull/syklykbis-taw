@@ -1,40 +1,42 @@
 import {useAuth0} from "@auth0/auth0-react";
 import React, {useEffect, useState} from 'react';
-
-import {NotLoggedModal} from "../components/modals/NotLoggedModal";
 import YourOrderCollapsible from "../components/yourOrders/YourOrderCollapsible";
 import YourOrdersColumn from "../components/yourOrders/YourOrdersColumn";
 import YourOrdersHeader from "../components/yourOrders/YourOrdersHeader";
 import {ClassNames} from "../components/utils/UtilFunctions";
 import {imageUrl} from "../components/utils/Image";
-import axios from "axios";
-import {decodeToken} from "react-jwt";
+import {gql, useQuery} from "@apollo/client";
+
+
+const GET_YOUR_ORDERS = gql`
+  query GetOrders($email: String!) {
+    order (email: $email) {
+        id
+        orderedProducts {
+            amount
+            hint
+            name
+            productId
+        }
+        totalPrice
+        placementDate
+        email
+        }
+    }
+`;
 
 const YourOrdersPage = () => {
     const [myOrders, setMyOrders] = useState([]);
     const [noOrders, setNoOrders] = useState(false);
     const [noOrdersSpinner, setNoOrdersSpinner] = useState(true);
-    const [showModal, setShowModal] = useState(-1);
-    const decodedToken = decodeToken(localStorage.getItem('token'))
-    const {loginWithRedirect} = useAuth0();
-    useEffect(() => {
-        decodedToken && getOrders();
-    }, []);
+    const {user} = useAuth0();
+    const {loading, data: yourOrders} = useQuery(GET_YOUR_ORDERS, {
+        variables: {email: user?.email},
+    });
 
-    const getOrders = async () => {
-        axios({
-            url: 'http://localhost:3001/orders',
-            method: 'POST',
-            data: {
-                userEmail: decodedToken.name
-            }
-        }).then(function (response) {
-            setMyOrders(response.data);
-        })
-            .catch(function (error) {
-                console.log(error);
-            });
-    };
+    useEffect(() => {
+        yourOrders && setMyOrders(yourOrders.order)
+    }, [yourOrders]);
 
     return (
         <div>
@@ -108,9 +110,9 @@ const YourOrdersPage = () => {
                         </div>}
                     />
                 </div>
-                {decodedToken.name ? (
+                {user && user.email ? (
                     <div>
-                        {myOrders.length > 0 ? (
+                        {myOrders && myOrders.length > 0 ? (
                             myOrders.slice(0).reverse().map((item, index) => {
                                 return (
                                     <div className='my-3 flex lg:my-0' key={index}>
@@ -229,15 +231,6 @@ const YourOrdersPage = () => {
                                 />
                             </div>
                         </h1>
-                        {showModal === -1 && (
-                            <NotLoggedModal
-                                onClickClose={() => {
-                                    setShowModal(1);
-                                }}
-                                onClickLogin={loginWithRedirect}
-                                message='Aby móc złożyć zamówienie, musisz się zalogować'
-                            />
-                        )}
                     </div>
                 )}
             </div>

@@ -11,9 +11,7 @@ import {OrderCategoryLayout} from "../components/order/OrderCategoryLayout";
 import OrderMap from "../components/order/OrderMap";
 import {imageUrl} from "../components/utils/Image";
 import {format} from 'date-fns';
-import axios from "axios";
-import {decodeToken} from "react-jwt";
-import {gql, useQuery} from "@apollo/client";
+import {gql, useMutation, useQuery} from "@apollo/client";
 
 function emptyArray(size) {
     const arr = [];
@@ -31,13 +29,12 @@ const Order = () => {
     const [showConfirmModal, setShowConfirmModal] = useState(-1);
     const {loginWithRedirect} = useAuth0();
     const [showThanksModal, setShowThanksModal] = useState(-1);
-    const decodedToken = decodeToken(localStorage.getItem('token'))
 
     const {user} = useAuth0();
     const GET_ALL_PRODUCTS = gql`
   query GetProducts {
     product {
-      id
+        id
         bottle
         name
         category
@@ -49,8 +46,24 @@ const Order = () => {
     }
   }
 `;
-    const {data} = useQuery(GET_ALL_PRODUCTS);
 
+    const MAKE_ORDER = gql`
+    mutation makeOrder($orderedProducts: [OrderedProductsInputType!], $placementDate: String!, $totalPrice: String!, $email: String!) {
+        makeOrder(orderedProducts: $orderedProducts, placementDate: $placementDate, totalPrice: $totalPrice, email: $email) {
+            orderedProducts {
+                amount
+                hint
+                name
+                productId
+            }
+        placementDate
+        totalPrice
+        email
+        }
+    }`
+
+    const {data} = useQuery(GET_ALL_PRODUCTS);
+    const [makeOrder, {error}] = useMutation(MAKE_ORDER)
     const iconRemap = {
         '[NIEGAZ]': {
             icon: <div
@@ -144,28 +157,21 @@ const Order = () => {
             .map((pd) => {
                 const {name, hint, number} = pd;
                 return {
-                    amount: selectedProductsAmount[number],
-                    hint,
-                    name,
-                    productId: number
+                    "amount": selectedProductsAmount[number],
+                    "hint": hint,
+                    "name": name,
+                    "productId": number
                 };
             });
 
-        axios({
-            url: 'http://localhost:3001/makeOrder',
-            method: 'POST',
-            data: {
-                orderedProducts,
-                placementDate: format(new Date(), 'dd/MM/yyyy'),
-                totalPrice: finalPrice().toFixed(2),
-                email: decodedToken.name
+        makeOrder({
+            variables: {
+                "orderedProducts": orderedProducts,
+                "placementDate": format(new Date(), 'dd/MM/yyyy'),
+                "totalPrice": finalPrice().toFixed(2),
+                "email": user.email,
             }
-        }).then(function (response) {
-            console.log(response);
         })
-            .catch(function (error) {
-                console.log(error);
-            });
     };
 
     const confirmOrder = () => {

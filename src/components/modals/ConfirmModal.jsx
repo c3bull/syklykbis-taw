@@ -1,14 +1,14 @@
 import emailjs from '@emailjs/browser';
-import { Form, Formik } from 'formik';
+import {Form, Formik} from 'formik';
 import * as Yup from 'yup';
 
 import ConfirmModalInputs from "./ConfirmModalInputs";
 import ConfirmModalLabels from "./ConfirmModalLabels";
 import Modal from "./Modal";
-import { imageUrl} from "../utils/Image";
+import {imageUrl} from "../utils/Image";
 import React from 'react';
-import { format } from 'date-fns';
-import { useNavigate } from 'react-router-dom';
+import {format} from 'date-fns';
+import {useNavigate} from 'react-router-dom';
 import {decodeToken} from "react-jwt";
 
 export function ConfirmModal(props) {
@@ -20,7 +20,6 @@ export function ConfirmModal(props) {
         showThanks,
         productsToSave,
     } = props;
-    const navigate = useNavigate();
     const decodedToken = decodeToken(localStorage.getItem('token'))
 
     const formSchema = Yup.object().shape({
@@ -78,31 +77,32 @@ export function ConfirmModal(props) {
                     onClickOrder();
                     onClickClose();
                     showThanks();
-                    setTimeout(() => navigate('/twoje-zamowienia'), 3000);
+                    setTimeout(() => window.location.href = '/twoje-zamowienia', 3000);
                 }}
             >
-                {({ errors }) => (
+                {({errors}) => (
                     <Form>
                         <div className="flex h-auto flex-col sm:pt-0">
                             <div className=" flex w-full flex-col gap-4 overflow-auto text-center">
                                 <p className="text-sm sm:text-lg">
                                     Składając zamówienie, potrzebujemy informacji, aby się z
                                     Panem/Panią skontaktować odnośnie dostarczenia zamówienia.
-                                    <br />
+                                    <br/>
                                     Prosimy o podanie imienia i nazwiska, telefonu kontaktowego
                                     oraz adresu, na jaki mamy dostarczyć zamówienie.
-                                    <br />
+                                    <br/>
                                     Zapłata za zamówienie zostanie uiszczona podczas odbioru.
                                 </p>
                             </div>
                             <div className="flex justify-center">
                                 <div className="flex w-fit flex-row items-center py-10">
-                                    <ConfirmModalLabels />
-                                    <ConfirmModalInputs errors={errors} />
+                                    <ConfirmModalLabels/>
+                                    <ConfirmModalInputs errors={errors}/>
                                 </div>
                             </div>
                             <div className="flex flex-col items-center justify-center">
-                                <div className="px-3 flex h-full max-h-64 flex-col gap-4 overflow-auto scrollbar-thin scrollbar-thumb-primary sm:w-1/2">
+                                <div
+                                    className="px-3 flex h-full max-h-64 flex-col gap-4 overflow-auto scrollbar-thin scrollbar-thumb-primary sm:w-1/2">
                                     {products}
                                 </div>
                                 <div className="pt-3">
