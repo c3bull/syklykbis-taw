@@ -10,7 +10,11 @@
 ## Your Orders Page
 ![gif4](https://user-images.githubusercontent.com/80101130/224050559-27626166-4665-4e78-b586-64ded50aed19.gif)
 
-## Phone display
+## Phone display (Main page, products page, about page)
 ![gif5](https://user-images.githubusercontent.com/80101130/224050595-104831eb-47da-4f27-be73-9bdb86cdc547.gif)
+
+## Phone display (about page, contact page, price list page)
 ![gif6](https://user-images.githubusercontent.com/80101130/224050605-7c837200-7f0e-49f6-9e54-9f0d3c2bef47.gif)
+
+## Phone display (order page, your orders page)
 ![gif7](https://user-images.githubusercontent.com/80101130/224050622-7aa9b835-a819-4100-a7d9-afc70c905daa.gif)
