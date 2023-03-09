@@ -1,3 +1,5 @@
+# Online shop using React.js, Node.js, MongoDB, GraphQL, Auth0, Tailwind CSS and few libraries
+
 ## Main Page
 ![gif1](https://user-images.githubusercontent.com/80101130/224050463-6afc05dc-aaff-4fa3-a494-7cf8871583c6.gif)
 
