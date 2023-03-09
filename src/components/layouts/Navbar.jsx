@@ -77,7 +77,7 @@ export default function Navbar() {
                                     <Link to={'/'}>
                                         <a className='cursor-pointer border-hidden'>
                                             <img
-                                                className='block h-16 w-auto lg:hidden'
+                                                className='block px-2 h-16 w-auto lg:hidden'
                                                 src={imageUrl('syklykbis.png')}
                                                 alt='Logo'
                                             />
@@ -93,12 +93,12 @@ export default function Navbar() {
                                         </a>
                                     </Link>
                                 </div>
-                                <div className='hidden sm:ml-6 sm:block'>
-                                    <div className='flex space-x-4'>
+                                <div className='hidden md:ml-6 sm:block'>
+                                    <div className='flex md:space-x-4'>
                                         {links.map((item) => (
                                             <Link key={item.id} to={item.link}>
                                                 <a
-                                                    className='flex items-center rounded-md border-hidden px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'
+                                                    className='whitespace-nowrap h-full flex items-center rounded-md border-hidden px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'
                                                     aria-current={item.current ? 'page' : undefined}
                                                 >
                                                     {item.name}

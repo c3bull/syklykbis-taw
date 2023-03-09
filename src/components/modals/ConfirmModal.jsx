@@ -8,8 +8,7 @@ import Modal from "./Modal";
 import {imageUrl} from "../utils/Image";
 import React from 'react';
 import {format} from 'date-fns';
-import {useNavigate} from 'react-router-dom';
-import {decodeToken} from "react-jwt";
+import {useAuth0} from "@auth0/auth0-react";
 
 export function ConfirmModal(props) {
     const {
@@ -20,8 +19,8 @@ export function ConfirmModal(props) {
         showThanks,
         productsToSave,
     } = props;
-    const decodedToken = decodeToken(localStorage.getItem('token'))
 
+    const {user} = useAuth0();
     const formSchema = Yup.object().shape({
         name: Yup.string().required('Pole obowiązkowe'),
         phone: Yup.string()
@@ -42,7 +41,7 @@ export function ConfirmModal(props) {
             {
                 subject: 'Zamówienie',
                 name: values.name,
-                email: decodedToken.name,
+                email: user.email,
                 phone: values.phone,
                 zipcode: values.zipcode,
                 address: values.address,
